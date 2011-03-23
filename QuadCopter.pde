@@ -13,19 +13,18 @@ Servo right_rear;  // pin 11
 Servo engines[ENGINE_COUNT] = {left_front, right_front, left_rear, right_rear};
 int engine_speeds[ENGINE_COUNT];
 
-const int MOTOR_ARM = 9; // Value for my ESCs. Yours is different!
-const int MIN_MOTOR_SPEED = 50;
-const int MAX_MOTOR_SPEED = 150;
+// Speeds are in microseconds, not degrees, for greater control
+const int MIN_MOTOR_SPEED = 1050; // Value for my ESCs and motors. Yours is different!
+const int MAX_MOTOR_SPEED = 2000; // Value for my ESCs and motors. Yours is different!
 
 // Activity
 byte red_led = 12; // System status
 byte green_led = 13; // Motor activity
 
 // Status
-boolean is_armed = false; // System has been armed
 int system_mode = 0; // 0: Unknown, 1: Auto, 2: Manual
 
-byte pos = 0;
+int pos = 0;
  
 void setup(){
   Serial.begin(9600);
@@ -48,21 +47,8 @@ void setup(){
   Serial.println("Choose mode (1: Auto, 2: Manual)");
 }
 
-void arm(){
-  Serial.println("Arming");
-  
-  // arm the speed controllers
-  set_all_speed(MOTOR_ARM);
-  delay(5000); // wait for arming/getting out of the way
-  is_armed = true;
-  
-  digitalWrite(red_led, LOW);
-  digitalWrite(green_led, HIGH); // System is ready
-  Serial.println("Armed");
-}
-
 void all_stop(){
-  set_all_speed(0);
+  set_all_speed(MIN_MOTOR_SPEED);
   
   digitalWrite(red_led, HIGH);
   digitalWrite(green_led, LOW); // System is NOT ready!
@@ -70,7 +56,7 @@ void all_stop(){
 }
 
 void set_engine_speed(int engine, int speed){
-  engines[engine].write(speed);
+  engines[engine].writeMicroseconds(speed);
   engine_speeds[engine] = speed;
 }
 
@@ -84,14 +70,13 @@ void set_all_speed(int speed){
 
 void loop(){
   if (system_mode == 1){
-    if (!is_armed) arm();
     
-    // Accelerate to max speed in 100ms increments
+    // Accelerate to max speed
     Serial.println("Accelerating");
-     digitalWrite(green_led, HIGH);
-    for(pos = MIN_MOTOR_SPEED; pos <= MAX_MOTOR_SPEED; pos += 1){
+    digitalWrite(green_led, HIGH);
+    for(pos = MIN_MOTOR_SPEED; pos <= MAX_MOTOR_SPEED; pos += 10){
       set_all_speed(pos);
-      delay(1000);
+      delay(500);
     }
     
     // Hold at max speed
@@ -99,12 +84,12 @@ void loop(){
     digitalWrite(green_led, LOW);
     delay(5000);
     
-    // Decelerate to stop in 100ms increments
+    // Decelerate to stop
     Serial.println("Decelerating");
     digitalWrite(green_led, HIGH);
-    for(pos = MAX_MOTOR_SPEED; pos >= MIN_MOTOR_SPEED; pos -= 1){
+    for(pos = MAX_MOTOR_SPEED; pos >= MIN_MOTOR_SPEED; pos -= 10){
       set_all_speed(pos);
-      delay(1000);
+      delay(500);
     }
     
     // Hold at stop
@@ -137,7 +122,7 @@ void loop(){
     
     // Prompt for next speed
     if (system_mode == 2){
-      Serial.println("Enter speed (0-180):");
+      Serial.println("Enter speed (1000-2000):");
     }
   }
 } 
