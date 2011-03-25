@@ -14,8 +14,9 @@ Servo engines[ENGINE_COUNT] = {left_front, right_front, left_rear, right_rear};
 int engine_speeds[ENGINE_COUNT];
 
 // Speeds are in microseconds, not degrees, for greater control
-const int MIN_MOTOR_SPEED = 1050; // Value for my ESCs and motors. Yours is different!
-const int MAX_MOTOR_SPEED = 2000; // Value for my ESCs and motors. Yours is different!
+const int MIN_MOTOR_SPEED = 1000;
+const int MAX_MOTOR_SPEED = 2000;
+int throttle = 0;
 
 // Activity
 byte red_led = 12; // System status
@@ -48,6 +49,7 @@ void setup(){
 }
 
 void all_stop(){
+  throttle = 0;
   set_all_speed(MIN_MOTOR_SPEED);
   
   digitalWrite(red_led, HIGH);
@@ -56,15 +58,35 @@ void all_stop(){
 }
 
 void set_engine_speed(int engine, int speed){
+  speed = constrain(speed, MIN_MOTOR_SPEED, MAX_MOTOR_SPEED);
+  //Serial.print("Setting engine ");
+  //Serial.print(engine);
+  //Serial.print(" speed to: ");
+  //Serial.println(speed);
   engines[engine].writeMicroseconds(speed);
   engine_speeds[engine] = speed;
 }
 
+int get_engine_speed(int engine){
+  return engine_speeds[engine];
+}
+
 void set_all_speed(int speed){
-  Serial.print("Setting speed to: ");
-  Serial.println(speed);
   for (byte engine = 0; engine < ENGINE_COUNT; engine++){
     set_engine_speed(engine, speed);
+  }
+}
+
+// Increase/decrease throttle
+void set_throttle(int new_throttle){
+  Serial.print("Setting throttle to: ");
+  Serial.println(new_throttle);
+  
+  int delta = new_throttle - throttle;
+  throttle = new_throttle;
+  
+  for (byte engine = 0; engine < ENGINE_COUNT; engine++){
+    set_engine_speed(engine, get_engine_speed(engine)+delta);
   }
 }
 
@@ -74,8 +96,8 @@ void loop(){
     // Accelerate to max speed
     Serial.println("Accelerating");
     digitalWrite(green_led, HIGH);
-    for(pos = MIN_MOTOR_SPEED; pos <= MAX_MOTOR_SPEED; pos += 10){
-      set_all_speed(pos);
+    for(pos = 0; pos <= 1000; pos += 10){
+      set_throttle(pos);
       delay(500);
     }
     
@@ -87,8 +109,8 @@ void loop(){
     // Decelerate to stop
     Serial.println("Decelerating");
     digitalWrite(green_led, HIGH);
-    for(pos = MAX_MOTOR_SPEED; pos >= MIN_MOTOR_SPEED; pos -= 10){
-      set_all_speed(pos);
+    for(pos = 1000; pos >= 0; pos -= 10){
+      set_throttle(pos);
       delay(500);
     }
     
@@ -114,15 +136,16 @@ void loop(){
     
     // Set speed or mode
     if (system_mode == 2){
-      set_all_speed(input_int);
+      set_throttle(input_int);
     }
     else{
       system_mode = input_int;
+      digitalWrite(red_led, LOW);
     }
     
     // Prompt for next speed
     if (system_mode == 2){
-      Serial.println("Enter speed (1000-2000):");
+      Serial.println("Enter throttle (0-1000):");
     }
   }
 } 
