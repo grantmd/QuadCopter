@@ -23,7 +23,7 @@ byte red_led = 12; // System status
 byte green_led = 13; // Motor activity
 
 // Status
-int system_mode = 0; // 0: Unknown, 1: Auto, 2: Manual
+int system_mode = 0; // 0: Unknown, 1: Auto, 2: Manual, 3: Test
 
 int pos = 0;
  
@@ -45,7 +45,7 @@ void setup(){
   all_stop(); // Just in case we were reset while engines were running
   
   Serial.println("Setup complete");
-  Serial.println("Choose mode (1: Auto, 2: Manual)");
+  Serial.println("Choose mode (1: Auto, 2: Manual, 3: Test)");
 }
 
 void all_stop(){
@@ -119,6 +119,14 @@ void loop(){
     digitalWrite(green_led, LOW);
     delay(5000);
   }
+  else if (system_mode == 3){
+    set_throttle(100);
+    digitalWrite(green_led, HIGH);
+    delay(250);
+    set_throttle(0);
+    digitalWrite(green_led, LOW);
+    delay(250);
+  }
   else if (Serial.available() > 0){
     // Wait for the buffer
     delay(40);
@@ -147,5 +155,10 @@ void loop(){
     if (system_mode == 2){
       Serial.println("Enter throttle (0-1000):");
     }
+  }
+  else if (millis() >= 10000){
+    Serial.println("Auto-entering Test mode");
+    system_mode = 3;
+    digitalWrite(red_led, LOW);
   }
 } 
