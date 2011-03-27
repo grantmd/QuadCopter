@@ -32,6 +32,11 @@ class I2C
     int sendReadRequest(int);
     word readWord();
     byte readByte();
+    void requestBytes(int);
+    
+    byte readNextByte();
+    word readNextWord();
+    
   private:
     int _address;
 };

@@ -30,16 +30,19 @@ I2C::I2C(int address){
   _address = address;
 }
 
+// The two sensors I have both let you read their address from register 0
 int I2C::getAddressFromDevice(){
   sendReadRequest(0x00);
   return readByte();
 }
 
+// Verify that the address we get back from the device matches what we have
 boolean I2C::validateDevice(){
   int got = getAddressFromDevice();
   return got == _address ? true : false;
 }
 
+// Write a setting to the device at register data_address
 int I2C::writeSetting(byte data_address, byte data_value){
   Wire.beginTransmission(_address);
   Wire.send(data_address);
@@ -47,19 +50,37 @@ int I2C::writeSetting(byte data_address, byte data_value){
   return Wire.endTransmission();
 }
 
+// Tell the device that we will be reading from register data_address
 int I2C::sendReadRequest(int data_address){
   Wire.beginTransmission(_address);
   Wire.send(data_address);
   return Wire.endTransmission();
 }
 
+// Request 2 bytes and read it
 word I2C::readWord(){
-  Wire.requestFrom(_address, 2);
+  requestBytes(2);
   return ((Wire.receive() << 8) | Wire.receive());
 }
 
+// Request a byte and read it
 byte I2C::readByte(){
-  Wire.requestFrom(_address, 1);
+  requestBytes(1);
   return Wire.receive();
+}
+
+// Request some number of bytes
+void I2C::requestBytes(int bytes){
+  Wire.requestFrom(_address, bytes);
+}
+
+// Read the next available byte
+byte I2C::readNextByte(){
+  return Wire.receive();
+}
+
+// Read the next available 2 bytes
+word I2C::readNextWord(){
+  return ((Wire.receive() << 8) | Wire.receive());
 }
 
