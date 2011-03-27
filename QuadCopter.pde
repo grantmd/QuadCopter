@@ -93,15 +93,14 @@ void loop(){
     digitalWrite(green_led, LOW);
     delay(250);
   }
-  else if (system_mode == 4){    
-    Serial.print("(Temp, X, Y, Z): ");
-    Serial.print(gyro.getTemp());
-    Serial.print("F, ");
-    Serial.print(gyro.getX());
+  else if (system_mode == 4){
+    gyro.updateAll();
+    
+    Serial.print(gyro.getRoll());
     Serial.print(", ");
-    Serial.print(gyro.getY());
+    Serial.print(gyro.getPitch());
     Serial.print(", ");
-    Serial.println(gyro.getZ());
+    Serial.println(gyro.getYaw());
 
     delay(100);
   }

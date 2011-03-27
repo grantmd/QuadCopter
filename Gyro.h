@@ -23,22 +23,46 @@
 #include "Definitions.h"
 #include "I2C.h"
 
+#define PITCH 0 // x-axis
+#define ROLL 1 // y-axis
+#define YAW 2 // z-axis
+
 class Gyro
 {
   public:
     Gyro();
     void init();
+    void autoZero();
+    
+    void updateAll();
+    
+    // The raw values from the sensor
+    int getRawRoll();
+    int getRawPitch();
+    int getRawYaw();
+    
+    // Smoothed/compensated values
     int getTemp();
-    int getX();
-    int getY();
-    int getZ();
+    int getRoll();
+    int getPitch();
+    int getYaw();
+    
+    void sleep();
+    void unsleep();
     
   private:
     I2C _i2c;
-    int temp;
-    int x;
-    int y;
-    int z;
+    
+    int temp; // Most recent temp (converted to degrees F)
+    int dataRaw[3]; // Raw and unfiltered gyro data
+    float dataSmoothed[3]; // Smoothed gyro data
+    int zero[3]; // Zero points for the gyro axes
+    
+    float _scaleFactor; // How to convert raw sensor data to SI units
+    float _smoothFactor; // 1.0 to not smooth, otherwise adjust as necessary
+
+    long int _lastMeasureTime;
+    boolean _sleeping;
 };
 
 #endif

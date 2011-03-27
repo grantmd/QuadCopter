@@ -28,6 +28,7 @@ class Accel
   public:
     Accel();
     void init();
+    
   private:
     I2C _i2c;
 };
