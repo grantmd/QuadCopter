@@ -130,10 +130,17 @@ void loop(){
     
     Serial.print("Gyro: ");
     Serial.print(gyro.getRoll());
-    Serial.print(", ");
+    //Serial.print(", ");
+    //Serial.print(gyro.getRawRoll());
+    Serial.print(" | ");
     Serial.print(gyro.getPitch());
-    Serial.print(", ");
-    Serial.println(gyro.getYaw());
+    //Serial.print(", ");
+    //Serial.print(gyro.getRawPitch());
+    Serial.print(" | ");
+    Serial.print(gyro.getYaw());
+    //Serial.print(", ");
+    //Serial.print(gyro.getRawYaw());
+    Serial.println();
 
     delay(100);
   }

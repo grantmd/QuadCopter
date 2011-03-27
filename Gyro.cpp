@@ -25,7 +25,7 @@
 
 Gyro::Gyro(){
   _scaleFactor = radians(1.0 / 14.375);  //  ITG3200 14.375 LSBs per °/sec
-  _smoothFactor = 1.0;
+  _smoothFactor = 0.75;
   _sleeping = false;
 }
 
