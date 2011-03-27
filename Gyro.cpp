@@ -39,6 +39,7 @@ void Gyro::init(){
   }
   else{
     _i2c.writeSetting(0x3E, 0x80); // Reset it
+    delay(50); // Give it a minute to startup
     _i2c.writeSetting(0x16, 0x1D); // 10Hz low pass filter
     _i2c.writeSetting(0x3E, 0x01); // use X gyro oscillator
     
