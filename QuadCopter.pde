@@ -57,7 +57,39 @@ void setup(){
 }
 
 void loop(){
-  if (system_mode == 1){
+  if (Serial.available() > 0){
+    // Wait for the buffer
+    delay(40);
+    
+    // Construct a string out of the bytes available
+    const int char_count = Serial.available();
+    char input[char_count];
+    
+    for (int i=0; i<char_count; i++){
+      input[i] = Serial.read();
+    }
+    
+    // Convert string to int
+    int input_int = atoi(input);
+    
+    // Set speed or mode
+    if (system_mode == 2){
+      engines.setThrottle(input_int);
+    }
+    else{
+      system_mode = input_int;
+      digitalWrite(red_led, LOW);
+      
+      Serial.print("Setting mode: ");
+      Serial.println(system_mode);
+    }
+    
+    // Prompt for next speed
+    if (system_mode == 2){
+      Serial.println("Enter throttle (0-1000):");
+    }
+  }
+  else if (system_mode == 1){
     
     // Accelerate to max speed
     Serial.println("Accelerating");
@@ -96,6 +128,7 @@ void loop(){
   else if (system_mode == 4){
     gyro.updateAll();
     
+    Serial.print("Gyro: ");
     Serial.print(gyro.getRoll());
     Serial.print(", ");
     Serial.print(gyro.getPitch());
@@ -103,35 +136,6 @@ void loop(){
     Serial.println(gyro.getYaw());
 
     delay(100);
-  }
-  else if (Serial.available() > 0){
-    // Wait for the buffer
-    delay(40);
-    
-    // Construct a string out of the bytes available
-    const int char_count = Serial.available();
-    char input[char_count];
-    
-    for (int i=0; i<char_count; i++){
-      input[i] = Serial.read();
-    }
-    
-    // Convert string to int
-    int input_int = atoi(input);
-    
-    // Set speed or mode
-    if (system_mode == 2){
-      engines.setThrottle(input_int);
-    }
-    else{
-      system_mode = input_int;
-      digitalWrite(red_led, LOW);
-    }
-    
-    // Prompt for next speed
-    if (system_mode == 2){
-      Serial.println("Enter throttle (0-1000):");
-    }
   }
   else if (millis() >= 10000){
     Serial.println("Auto-entering Engine Test mode");
