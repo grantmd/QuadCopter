@@ -28,9 +28,31 @@ class Accel
   public:
     Accel();
     void init();
+    void autoZero();
+    
+    void updateAll();
+    
+    // The raw values from the sensor
+    int getRawRoll();
+    int getRawPitch();
+    int getRawYaw();
+    
+    // Smoothed/compensated values
+    int getRoll();
+    int getPitch();
+    int getYaw();
     
   private:
     I2C _i2c;
+    
+    int dataRaw[3]; // Raw and unfiltered accel data
+    float dataSmoothed[3]; // Smoothed accel data
+    int zero[3]; // Zero points for the accel axes
+    
+    float _scaleFactor; // How to convert raw sensor data to SI units
+    float _smoothFactor; // 1.0 to not smooth, otherwise adjust as necessary
+
+    long int _lastMeasureTime;
 };
 
 #endif

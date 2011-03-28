@@ -29,8 +29,8 @@ class Engines
     Engines();
     void init();
     void allStop();
-    void setEngineSpeed(int, int);
-    int getEngineSpeed(int);
+    void setEngineSpeed(byte, int);
+    int getEngineSpeed(byte);
     void setAllSpeed(int);
     void setThrottle(int);
     

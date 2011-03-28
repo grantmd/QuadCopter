@@ -42,13 +42,13 @@ void Engines::allStop(){
   setAllSpeed(MIN_MOTOR_SPEED);
 }
 
-void Engines::setEngineSpeed(int engine, int speed){
+void Engines::setEngineSpeed(byte engine, int speed){
   speed = constrain(speed, MIN_MOTOR_SPEED, MAX_MOTOR_SPEED);
   engines[engine].writeMicroseconds(speed);
   engine_speeds[engine] = speed;
 }
 
-int Engines::getEngineSpeed(int engine){
+int Engines::getEngineSpeed(byte engine){
   return engine_speeds[engine];
 }
 

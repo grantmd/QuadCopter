@@ -6,3 +6,7 @@
 
 #define GYRO_ADDR 0x68
 #define ACCEL_ADDR 0x53
+
+#define PITCH 0 // x-axis
+#define ROLL 1 // y-axis
+#define YAW 2 // z-axis

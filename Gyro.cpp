@@ -24,22 +24,23 @@
 #include "Utils.h"
 
 Gyro::Gyro(){
-  _scaleFactor = radians(1.0 / 14.375);  //  ITG3200 14.375 LSBs per °/sec
+  _scaleFactor = radians(1.0 / 14.375); // ITG3200 14.375 LSBs per °/sec
   _smoothFactor = 0.75;
   _sleeping = false;
+  _i2c = I2C();
 }
 
 // Init the gyro by checking if it's connected and then resetting it and applying our settings
 void Gyro::init(){
   Serial.println("Initing Gyro");
-  _i2c = I2C(GYRO_ADDR);
+  _i2c.setAddress(GYRO_ADDR);
   
   if (!_i2c.getAddressFromDevice()){
     Serial.println("GYRO NOT CONNECTED!");
   }
   else{
     _i2c.writeSetting(0x3E, 0x80); // Reset it
-    delay(50); // Give it a minute to startup
+    delay(50); // Give it some time to startup
     _i2c.writeSetting(0x16, 0x1D); // 10Hz low pass filter
     _i2c.writeSetting(0x3E, 0x01); // use X gyro oscillator
     
@@ -48,7 +49,7 @@ void Gyro::init(){
     Serial.println("F");
     
     // TODO: We should calculate these once under known conditions and store them in eeprom
-    autoZero();
+    //autoZero();
   }
 }
 
@@ -57,10 +58,10 @@ void Gyro::init(){
 void Gyro::autoZero(){
   // Take 50 measurements of all 3 axis, find the median, that's our zero-point
   // Why 50? Because that's what the aeroquad project does
-  // (note, I could not get to 50 -- my arduino locks up. so I'm leaving it at 9)
-  byte loopCount = 9;
+  // (note, I could not get to 50 -- my arduino locks up. so I'm leaving it at 10)
+  byte loopCount = 10;
   
-  Serial.print("Starting autoZero with ");
+  Serial.print("Starting gyro autoZero with ");
   Serial.print(loopCount, DEC);
   Serial.println(" iterations.");
   int findZero[loopCount];
@@ -72,7 +73,7 @@ void Gyro::autoZero(){
     }
     
     zero[axis] = findMedian(findZero, loopCount);
-    Serial.print("Zero of axis ");
+    Serial.print("Zero of gyro axis ");
     Serial.print(axis, DEC);
     Serial.print(" is: ");
     Serial.println(zero[axis]);

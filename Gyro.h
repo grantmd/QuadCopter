@@ -23,10 +23,6 @@
 #include "Definitions.h"
 #include "I2C.h"
 
-#define PITCH 0 // x-axis
-#define ROLL 1 // y-axis
-#define YAW 2 // z-axis
-
 class Gyro
 {
   public:

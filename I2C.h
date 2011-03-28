@@ -25,7 +25,9 @@ class I2C
 {
   public:
     I2C();
-    I2C(int);
+    
+    void setAddress(int);
+    
     int getAddressFromDevice();
     boolean validateDevice();
     int writeSetting(byte, byte);

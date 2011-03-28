@@ -22,11 +22,9 @@
 #include <Wire.h>
 
 I2C::I2C(){
-  Wire.begin();
 }
 
-I2C::I2C(int address){
-  Wire.begin();
+void I2C::setAddress(int address){
   _address = address;
 }
 

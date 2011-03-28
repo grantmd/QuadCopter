@@ -28,19 +28,20 @@
 
 Engines engines;
 Gyro gyro;
-Accel accel;
+//Accel accel;
 
 // Activity
 byte red_led = 12; // System status
 byte green_led = 13; // Motor activity
 
 // Status
-int system_mode = 0; // 0: Unknown, 1: Auto, 2: Manual, 3: Engine Test, 4: Sensor Test
+byte system_mode = 0; // 0: Unknown, 1: Auto, 2: Manual, 3: Engine Test, 4: Sensor Test
 
 int pos = 0;
  
 void setup(){
   Serial.begin(9600);
+  Wire.begin(); // For the gyro and accel
   
   // Activity LEDs
   pinMode(red_led, OUTPUT);
@@ -50,7 +51,7 @@ void setup(){
     
   engines.init();
   gyro.init();
-  accel.init();
+  //accel.init();
   
   Serial.println("Setup complete");
   Serial.println("Choose mode (1: Auto, 2: Manual, 3: Engine Test, 4: Sensor Test)");
@@ -81,7 +82,7 @@ void loop(){
       digitalWrite(red_led, LOW);
       
       Serial.print("Setting mode: ");
-      Serial.println(system_mode);
+      Serial.println(system_mode, DEC);
     }
     
     // Prompt for next speed
@@ -127,7 +128,6 @@ void loop(){
   }
   else if (system_mode == 4){
     gyro.updateAll();
-    
     Serial.print("Gyro: ");
     Serial.print(gyro.getRoll());
     //Serial.print(", ");
@@ -141,8 +141,23 @@ void loop(){
     //Serial.print(", ");
     //Serial.print(gyro.getRawYaw());
     Serial.println();
+    
+    /*accel.updateAll();
+    Serial.print("Accel: ");
+    //Serial.print(accel.getRoll());
+    //Serial.print(", ");
+    Serial.print(accel.getRawRoll());
+    Serial.print(" | ");
+    //Serial.print(accel.getPitch());
+    //Serial.print(", ");
+    Serial.print(accel.getRawPitch());
+    Serial.print(" | ");
+    //Serial.print(accel.getYaw());
+    //Serial.print(", ");
+    Serial.print(accel.getRawYaw());
+    Serial.println();*/
 
-    delay(100);
+    delay(1000);
   }
   else if (millis() >= 10000){
     Serial.println("Auto-entering Engine Test mode");
