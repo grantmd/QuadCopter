@@ -26,23 +26,21 @@ class I2C
   public:
     I2C();
     
-    void setAddress(int);
+    void setAddress(byte);
     
-    int getAddressFromDevice();
+    byte getAddressFromDevice();
     boolean validateDevice();
-    int writeSetting(byte, byte);
-    int sendReadRequest(int);
+    byte writeSetting(byte, byte);
+    byte sendReadRequest(byte);
     word readWord();
     byte readByte();
-    void requestBytes(int);
+    void requestBytes(byte);
     
     byte readNextByte();
     word readNextWord();
     
   private:
-    int _address;
+    byte _address;
 };
 
 #endif
-
-

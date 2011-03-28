@@ -23,26 +23,25 @@
 #include "I2C.h"
 #include "Utils.h"
 
-Accel::Accel(){
+Accel::Accel() : I2C(){
   _scaleFactor = G_2_MPS2(4.0 / 1024); // ±2 g is a range of 4, converted to Gs, and then converted to m/s2
   _smoothFactor = 1.0;
-  _i2c = I2C();
 }
 
 void Accel::init(){
   Serial.println("Initing Accel");
-  _i2c.setAddress(ACCEL_ADDR);
+  setAddress(ACCEL_ADDR);
   
-  if (!_i2c.getAddressFromDevice()){
+  if (!getAddressFromDevice()){
     Serial.println("ACCEL NOT CONNECTED!");
   }
   else{
-    _i2c.writeSetting(0x2D, 0x08); // Power up, measure mode
-    _i2c.writeSetting(0x2C, 0x0A); // 100Hz low pass filter
-    _i2c.writeSetting(0x31, 0x00); // ±2 g
+    writeSetting(0x2D, 0x08); // Power up, measure mode
+    writeSetting(0x2C, 0x0A); // 100Hz low pass filter
+    writeSetting(0x31, 0x00); // ±2 g
     
     // TODO: We should calculate these once under known conditions and store them in eeprom
-    //autoZero();
+    autoZero();
   }
 }
 
@@ -60,8 +59,8 @@ void Accel::autoZero(){
   int findZero[loopCount];
   for (byte axis = PITCH; axis <= YAW; axis++){
     for (byte i=0; i<loopCount; i++){
-      _i2c.sendReadRequest(0x32 + (axis * 2));
-      findZero[i] = _i2c.readWord();
+      sendReadRequest(0x32 + (axis * 2));
+      findZero[i] = readWord();
       delay(10);
     }
     
@@ -76,11 +75,11 @@ void Accel::autoZero(){
 // Updates all raw measurements from the accelerometer
 void Accel::updateAll(){
   //Serial.println("Updating all accel data");
-  _i2c.sendReadRequest(0x32);
-  _i2c.requestBytes(6);
+  sendReadRequest(0x32);
+  requestBytes(6);
 
   for (byte axis = PITCH; axis <= YAW; axis++) {
-     dataRaw[axis] = zero[axis] - _i2c.readNextWord();
+     dataRaw[axis] = zero[axis] - readNextWord();
      dataSmoothed[axis] = filterSmooth((float)dataRaw[axis] * _scaleFactor, dataSmoothed[axis], _smoothFactor);
   }
   

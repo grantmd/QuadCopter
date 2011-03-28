@@ -62,5 +62,3 @@ class Gyro : public I2C
 };
 
 #endif
-
-

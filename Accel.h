@@ -56,5 +56,3 @@ class Accel : public I2C
 };
 
 #endif
-
-

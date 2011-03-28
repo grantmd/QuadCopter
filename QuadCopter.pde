@@ -28,7 +28,7 @@
 
 Engines engines;
 Gyro gyro;
-//Accel accel;
+Accel accel;
 
 // Activity
 byte red_led = 12; // System status
@@ -51,7 +51,7 @@ void setup(){
     
   engines.init();
   gyro.init();
-  //accel.init();
+  accel.init();
   
   Serial.println("Setup complete");
   Serial.println("Choose mode (1: Auto, 2: Manual, 3: Engine Test, 4: Sensor Test)");
@@ -142,20 +142,20 @@ void loop(){
     //Serial.print(gyro.getRawYaw());
     Serial.println();
     
-    /*accel.updateAll();
+    accel.updateAll();
     Serial.print("Accel: ");
-    //Serial.print(accel.getRoll());
+    Serial.print(accel.getRoll());
     //Serial.print(", ");
-    Serial.print(accel.getRawRoll());
+    //Serial.print(accel.getRawRoll());
     Serial.print(" | ");
-    //Serial.print(accel.getPitch());
+    Serial.print(accel.getPitch());
     //Serial.print(", ");
-    Serial.print(accel.getRawPitch());
+    //Serial.print(accel.getRawPitch());
     Serial.print(" | ");
-    //Serial.print(accel.getYaw());
+    Serial.print(accel.getYaw());
     //Serial.print(", ");
-    Serial.print(accel.getRawYaw());
-    Serial.println();*/
+    //Serial.print(accel.getRawYaw());
+    Serial.println();
 
     delay(100);
   }

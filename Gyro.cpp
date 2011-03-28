@@ -48,7 +48,7 @@ void Gyro::init(){
     Serial.println("F");
     
     // TODO: We should calculate these once under known conditions and store them in eeprom
-    //autoZero();
+    autoZero();
   }
 }
 

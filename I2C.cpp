@@ -24,24 +24,24 @@
 I2C::I2C(){
 }
 
-void I2C::setAddress(int address){
+void I2C::setAddress(byte address){
   _address = address;
 }
 
 // The two sensors I have both let you read their address from register 0
-int I2C::getAddressFromDevice(){
+byte I2C::getAddressFromDevice(){
   sendReadRequest(0x00);
   return readByte();
 }
 
 // Verify that the address we get back from the device matches what we have
 boolean I2C::validateDevice(){
-  int got = getAddressFromDevice();
+  byte got = getAddressFromDevice();
   return got == _address ? true : false;
 }
 
 // Write a setting to the device at register data_address
-int I2C::writeSetting(byte data_address, byte data_value){
+byte I2C::writeSetting(byte data_address, byte data_value){
   Wire.beginTransmission(_address);
   Wire.send(data_address);
   Wire.send(data_value);
@@ -49,7 +49,7 @@ int I2C::writeSetting(byte data_address, byte data_value){
 }
 
 // Tell the device that we will be reading from register data_address
-int I2C::sendReadRequest(int data_address){
+byte I2C::sendReadRequest(byte data_address){
   Wire.beginTransmission(_address);
   Wire.send(data_address);
   return Wire.endTransmission();
@@ -68,7 +68,7 @@ byte I2C::readByte(){
 }
 
 // Request some number of bytes
-void I2C::requestBytes(int bytes){
+void I2C::requestBytes(byte bytes){
   Wire.requestFrom(_address, bytes);
 }
 
