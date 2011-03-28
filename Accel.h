@@ -23,7 +23,7 @@
 #include "Definitions.h"
 #include "I2C.h"
 
-class Accel
+class Accel : public I2C
 {
   public:
     Accel();

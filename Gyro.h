@@ -23,7 +23,7 @@
 #include "Definitions.h"
 #include "I2C.h"
 
-class Gyro
+class Gyro : public I2C
 {
   public:
     Gyro();

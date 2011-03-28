@@ -23,26 +23,25 @@
 #include "I2C.h"
 #include "Utils.h"
 
-Gyro::Gyro(){
+Gyro::Gyro() : I2C(){
   _scaleFactor = radians(1.0 / 14.375); // ITG3200 14.375 LSBs per °/sec
   _smoothFactor = 0.75;
   _sleeping = false;
-  _i2c = I2C();
 }
 
 // Init the gyro by checking if it's connected and then resetting it and applying our settings
 void Gyro::init(){
   Serial.println("Initing Gyro");
-  _i2c.setAddress(GYRO_ADDR);
+  setAddress(GYRO_ADDR);
   
-  if (!_i2c.getAddressFromDevice()){
+  if (!getAddressFromDevice()){
     Serial.println("GYRO NOT CONNECTED!");
   }
   else{
-    _i2c.writeSetting(0x3E, 0x80); // Reset it
+    writeSetting(0x3E, 0x80); // Reset it
     delay(50); // Give it some time to startup
-    _i2c.writeSetting(0x16, 0x1D); // 10Hz low pass filter
-    _i2c.writeSetting(0x3E, 0x01); // use X gyro oscillator
+    writeSetting(0x16, 0x1D); // 10Hz low pass filter
+    writeSetting(0x3E, 0x01); // use X gyro oscillator
     
     Serial.print("Current temp: ");
     Serial.print(getTemp());
@@ -67,8 +66,8 @@ void Gyro::autoZero(){
   int findZero[loopCount];
   for (byte axis = PITCH; axis <= YAW; axis++){
     for (byte i=0; i<loopCount; i++){
-      _i2c.sendReadRequest(0x1D + (axis * 2));
-      findZero[i] = _i2c.readWord();
+      sendReadRequest(0x1D + (axis * 2));
+      findZero[i] = readWord();
       delay(10);
     }
     
@@ -83,11 +82,11 @@ void Gyro::autoZero(){
 // Updates all raw measurements from the gyro (except temp)
 void Gyro::updateAll(){
   //Serial.println("Updating all gyro data");
-  _i2c.sendReadRequest(0x1D);
-  _i2c.requestBytes(6);
+  sendReadRequest(0x1D);
+  requestBytes(6);
 
   for (byte axis = PITCH; axis <= YAW; axis++) {
-     dataRaw[axis] = zero[axis] - _i2c.readNextWord();
+     dataRaw[axis] = zero[axis] - readNextWord();
      dataSmoothed[axis] = filterSmooth((float)dataRaw[axis] * _scaleFactor, dataSmoothed[axis], _smoothFactor);
   }
   
@@ -111,8 +110,8 @@ int Gyro::getRawYaw(){
 ///////////
 
 int Gyro::getTemp(){
-  _i2c.sendReadRequest(0x1B);
-  temp = _i2c.readWord();
+  sendReadRequest(0x1B);
+  temp = readWord();
   temp = 35.0 + ((temp + 13200) / 280.0); // -13200 == 35C, 280 == Each degree
   temp = 32 + (temp * 1.8); // Convert to F
   
@@ -135,12 +134,12 @@ int Gyro::getYaw(){
 
 void Gyro::sleep(){
   if (_sleeping) return;
-  _i2c.writeSetting(0x3E, 0x40);
+  writeSetting(0x3E, 0x40);
   _sleeping = true;
 }
 
 void Gyro::unsleep(){
   if (!_sleeping) return;
-  _i2c.writeSetting(0x3E, 0x00);
+  writeSetting(0x3E, 0x00);
   _sleeping = false;
 }

@@ -157,7 +157,7 @@ void loop(){
     Serial.print(accel.getRawYaw());
     Serial.println();*/
 
-    delay(1000);
+    delay(100);
   }
   else if (millis() >= 10000){
     Serial.println("Auto-entering Engine Test mode");
