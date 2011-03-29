@@ -92,6 +92,8 @@ void loop(){
   }
   else if (system_mode == 1){
     
+    if (!engines.isArmed()) engines.arm();
+    
     // Accelerate to max speed
     Serial.println("Accelerating");
     digitalWrite(green_led, HIGH);
@@ -119,6 +121,8 @@ void loop(){
     delay(5000);
   }
   else if (system_mode == 3){
+    if (!engines.isArmed()) engines.arm();
+    
     engines.setThrottle(100);
     digitalWrite(green_led, HIGH);
     delay(250);

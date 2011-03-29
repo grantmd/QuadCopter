@@ -34,11 +34,17 @@ class Engines
     void setAllSpeed(int);
     void setThrottle(int);
     
+    void arm();
+    void disarm();
+    boolean isArmed();
+    
   private:
     Servo engines[ENGINE_COUNT];
     int engine_speeds[ENGINE_COUNT];
 
     int throttle;
+    
+    boolean _armed;
 };
 
 #endif

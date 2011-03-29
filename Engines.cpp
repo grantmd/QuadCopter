@@ -67,3 +67,29 @@ void Engines::setThrottle(int new_throttle){
     setEngineSpeed(engine, getEngineSpeed(engine)+delta);
   }
 }
+
+void Engines::arm(){
+  if (_armed) return;
+  
+  Serial.print("Arming engines... ");
+  setThrottle(50);
+  delay(1000);
+  Serial.println("Armed");
+  
+  _armed = true;
+}
+
+void Engines::disarm(){
+  if (!_armed) return;
+  
+  Serial.print("Disarming engines... ");
+  setThrottle(0);
+  delay(1000);
+  Serial.println("Disarmed");
+  
+  _armed = false;
+}
+
+boolean Engines::isArmed(){
+  return _armed;
+}
