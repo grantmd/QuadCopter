@@ -20,6 +20,7 @@
 // Include libs
 #include <Wire.h>
 #include "Definitions.h"
+#include "EEPROM.h"
 #include "Engines.h"
 
 #ifdef SENSORS_ENABLED
