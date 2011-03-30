@@ -21,7 +21,6 @@
 
 #include "WProgram.h"
 #include "Definitions.h"
-#include <Servo.h>
 
 class Engines
 {
@@ -39,7 +38,8 @@ class Engines
     boolean isArmed();
     
   private:
-    Servo engines[ENGINE_COUNT];
+    byte engines[ENGINE_COUNT];
+    
     int engine_speeds[ENGINE_COUNT];
 
     int throttle;

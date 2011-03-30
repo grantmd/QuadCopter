@@ -17,17 +17,16 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>. 
 */
 
-#include <Servo.h>
 #include "WProgram.h"
 #include "Definitions.h"
 #include "Engines.h"
 
 Engines::Engines(){  
   // Setup engines
-  engines[0].attach(3);
-  engines[1].attach(9);
-  engines[2].attach(10);
-  engines[3].attach(11);
+  engines[0] = LEFT_FRONT_MOTOR_PIN;
+  engines[1] = RIGHT_FRONT_MOTOR_PIN;
+  engines[2] = LEFT_REAR_MOTOR_PIN;
+  engines[3] = RIGHT_REAR_MOTOR_PIN;
 }
 
 void Engines::init(){
@@ -39,12 +38,16 @@ void Engines::init(){
 void Engines::allStop(){
   Serial.println("All stop");
   throttle = 0;
-  setAllSpeed(MIN_MOTOR_SPEED);
+  setAllSpeed(0);
 }
 
 void Engines::setEngineSpeed(byte engine, int speed){
   speed = constrain(speed, MIN_MOTOR_SPEED, MAX_MOTOR_SPEED);
-  engines[engine].writeMicroseconds(speed);
+  
+  // Analog write supports commands from 0-255 => 0 - 100% duty cycle
+  // Using 125-250 for motor setting 1000-2000
+  analogWrite(engines[engine], speed / 8);
+  
   engine_speeds[engine] = speed;
 }
 
@@ -53,6 +56,8 @@ int Engines::getEngineSpeed(byte engine){
 }
 
 void Engines::setAllSpeed(int speed){
+  Serial.print("Setting all speed to: ");
+  Serial.println(speed);
   for (byte engine = 0; engine < ENGINE_COUNT; engine++){
     setEngineSpeed(engine, speed);
   }
@@ -63,6 +68,8 @@ void Engines::setThrottle(int new_throttle){
   int delta = new_throttle - throttle;
   throttle = new_throttle;
   
+  Serial.print("Setting throttle to: ");
+  Serial.println(throttle);
   for (byte engine = 0; engine < ENGINE_COUNT; engine++){
     setEngineSpeed(engine, getEngineSpeed(engine)+delta);
   }
@@ -73,7 +80,7 @@ void Engines::arm(){
   
   Serial.print("Arming engines... ");
   setThrottle(50);
-  delay(1000);
+  delay(3000);
   Serial.println("Armed");
   
   _armed = true;
@@ -84,7 +91,7 @@ void Engines::disarm(){
   
   Serial.print("Disarming engines... ");
   setThrottle(0);
-  delay(1000);
+  delay(3000);
   Serial.println("Disarmed");
   
   _armed = false;

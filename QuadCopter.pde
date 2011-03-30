@@ -19,10 +19,8 @@
 
 // Include libs
 #include <Wire.h>
-#include <Servo.h>
 #include "Definitions.h"
 #include "Engines.h"
-#include "I2C.h"
 #include "Accel.h"
 #include "Gyro.h"
 
@@ -125,10 +123,10 @@ void loop(){
     
     engines.setThrottle(100);
     digitalWrite(green_led, HIGH);
-    delay(250);
+    delay(500);
     engines.setThrottle(0);
     digitalWrite(green_led, LOW);
-    delay(250);
+    delay(500);
   }
   else if (system_mode == 4){
     gyro.updateAll();
@@ -163,7 +161,7 @@ void loop(){
 
     delay(100);
   }
-  else if (millis() >= 10000){
+  else if (millis() >= 10000 && system_mode != 2){
     Serial.println("Auto-entering Engine Test mode");
     system_mode = 3;
     digitalWrite(red_led, LOW);
