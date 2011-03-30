@@ -21,12 +21,18 @@
 #include <Wire.h>
 #include "Definitions.h"
 #include "Engines.h"
+
+#ifdef SENSORS_ENABLED
 #include "Accel.h"
 #include "Gyro.h"
+#endif
 
 Engines engines;
+
+#ifdef SENSORS_ENABLED
 Gyro gyro;
 Accel accel;
+#endif
 
 // Activity
 byte red_led = 12; // System status
@@ -48,8 +54,10 @@ void setup(){
   digitalWrite(red_led, HIGH); // Indicate system is not ready
     
   engines.init();
+  #ifdef SENSORS_ENABLED
   gyro.init();
   accel.init();
+  #endif
   
   Serial.println("Setup complete");
   Serial.println("Choose mode (1: Auto, 2: Manual, 3: Engine Test, 4: Sensor Test)");
@@ -129,6 +137,8 @@ void loop(){
     delay(500);
   }
   else if (system_mode == 4){
+    
+    #ifdef SENSORS_ENABLED
     gyro.updateAll();
     Serial.print("Gyro: ");
     Serial.print(gyro.getRoll());
@@ -158,6 +168,7 @@ void loop(){
     //Serial.print(", ");
     //Serial.print(accel.getRawYaw());
     Serial.println();
+    #endif
 
     delay(100);
   }

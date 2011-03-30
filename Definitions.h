@@ -9,6 +9,8 @@
 #define LEFT_REAR_MOTOR_PIN 10
 #define RIGHT_REAR_MOTOR_PIN  11
 
+#define SENSORS_ENABLED
+
 #define GYRO_ADDR 0x68
 #define ACCEL_ADDR 0x53
 
