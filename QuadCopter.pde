@@ -23,8 +23,8 @@
 #include "Engines.h"
 
 #ifdef SENSORS_ENABLED
-#include "Accel.h"
 #include "Gyro.h"
+#include "Accel.h"
 #endif
 
 Engines engines;
