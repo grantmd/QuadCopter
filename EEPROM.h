@@ -25,4 +25,7 @@
 byte eeprom_read(int);
 void eeprom_write(int, byte);
 
+void eeprom_write_all();
+void eeprom_read_all();
+
 #endif

@@ -22,10 +22,20 @@
 #include <EEPROM.h>
 #include "EEPROM.h"
 
+// Read a single value from eeprom
 byte eeprom_read(int address){
   return EEPROM.read(address);
 }
 
+// Write a single valud to eeprom
 void eeprom_write(int address, byte value){
   EEPROM.write(address, value);
+}
+
+// Write everything we care about to eeprom
+void eeprom_write_all(){
+}
+
+// Reload everything we care about from eeprom
+void eeprom_read_all(){
 }
