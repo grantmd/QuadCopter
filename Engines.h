@@ -33,7 +33,7 @@ class Engines
     void setAllSpeed(int);
     void setThrottle(int);
     
-    void arm();
+    void arm(byte);
     void disarm();
     boolean isArmed();
     

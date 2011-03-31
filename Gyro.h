@@ -46,6 +46,8 @@ class Gyro : public I2C
     void sleep();
     void unsleep();
     
+    float getSmoothFactor();
+    
   private:
     I2C _i2c;
     

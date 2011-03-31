@@ -30,13 +30,10 @@ Engines::Engines(){
 }
 
 void Engines::init(){
-  allStop();
-  
-  Serial.println("Engines ready");
+  //allStop();
 }
 
 void Engines::allStop(){
-  Serial.println("All stop");
   throttle = 0;
   setAllSpeed(0);
 }
@@ -56,7 +53,6 @@ int Engines::getEngineSpeed(byte engine){
 }
 
 void Engines::setAllSpeed(int speed){
-  Serial.print("Setting all speed to: ");
   Serial.println(speed);
   for (byte engine = 0; engine < ENGINE_COUNT; engine++){
     setEngineSpeed(engine, speed);
@@ -68,20 +64,21 @@ void Engines::setThrottle(int new_throttle){
   int delta = new_throttle - throttle;
   throttle = new_throttle;
   
-  Serial.print("Setting throttle to: ");
-  Serial.println(throttle);
   for (byte engine = 0; engine < ENGINE_COUNT; engine++){
     setEngineSpeed(engine, getEngineSpeed(engine)+delta);
   }
 }
 
-void Engines::arm(){
+void Engines::arm(byte method){
   if (_armed) return;
   
-  Serial.print("Arming engines... ");
-  setThrottle(50);
-  delay(3000);
-  Serial.println("Armed");
+  switch (method){
+    case 1:
+      setAllSpeed(MAX_MOTOR_SPEED);
+      break;
+    default:
+      setAllSpeed(MIN_MOTOR_SPEED);
+  }
   
   _armed = true;
 }
@@ -89,10 +86,7 @@ void Engines::arm(){
 void Engines::disarm(){
   if (!_armed) return;
   
-  Serial.print("Disarming engines... ");
   setThrottle(0);
-  delay(3000);
-  Serial.println("Disarmed");
   
   _armed = false;
 }

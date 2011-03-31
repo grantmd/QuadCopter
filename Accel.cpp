@@ -26,10 +26,11 @@
 Accel::Accel() : I2C(){
   _scaleFactor = G_2_MPS2(4.0 / 1024); // ±2 g is a range of 4, converted to Gs, and then converted to m/s2
   _smoothFactor = 1.0;
+  _oneG = 9.80665;
 }
 
 void Accel::init(){
-  Serial.println("Initing Accel");
+  //Serial.println("Initing Accel");
   setAddress(ACCEL_ADDR);
   
   if (!getAddressFromDevice()){
@@ -53,9 +54,9 @@ void Accel::autoZero(){
   // (note, I could not get to 50 -- my arduino locks up. so I'm leaving it at 10)
   byte loopCount = 10;
   
-  Serial.print("Starting accel autoZero with ");
-  Serial.print(loopCount, DEC);
-  Serial.println(" iterations.");
+  //Serial.print("Starting accel autoZero with ");
+  //Serial.print(loopCount, DEC);
+  //Serial.println(" iterations.");
   int findZero[loopCount];
   for (byte axis = PITCH; axis <= YAW; axis++){
     for (byte i=0; i<loopCount; i++){
@@ -65,11 +66,16 @@ void Accel::autoZero(){
     }
     
     zero[axis] = findMedian(findZero, loopCount);
-    Serial.print("Zero of accel axis ");
-    Serial.print(axis, DEC);
-    Serial.print(" is: ");
-    Serial.println(zero[axis]);
+    //Serial.print("Zero of accel axis ");
+    //Serial.print(axis, DEC);
+    //Serial.print(" is: ");
+    //Serial.println(zero[axis]);
   }
+  
+  // We need to recalc what 1G feels like
+  updateAll();
+  _oneG = zero[YAW];
+  zero[YAW] = (zero[ROLL] + zero[PITCH]) / 2;
 }
 
 // Updates all raw measurements from the accelerometer
@@ -114,3 +120,8 @@ int Accel::getYaw(){
   return dataSmoothed[YAW];
 }
 
+/////////////
+
+float Accel::getSmoothFactor(){
+  return _smoothFactor;
+}

@@ -42,6 +42,8 @@ class Accel : public I2C
     int getPitch();
     int getYaw();
     
+    float getSmoothFactor();
+    
   private:
     I2C _i2c;
     
@@ -53,6 +55,8 @@ class Accel : public I2C
     float _smoothFactor; // 1.0 to not smooth, otherwise adjust as necessary
 
     long int _lastMeasureTime;
+    
+    float _oneG;
 };
 
 #endif

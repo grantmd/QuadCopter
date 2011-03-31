@@ -31,7 +31,7 @@ Gyro::Gyro() : I2C(){
 
 // Init the gyro by checking if it's connected and then resetting it and applying our settings
 void Gyro::init(){
-  Serial.println("Initing Gyro");
+  //Serial.println("Initing Gyro");
   setAddress(GYRO_ADDR);
   
   if (!getAddressFromDevice()){
@@ -43,9 +43,9 @@ void Gyro::init(){
     writeSetting(0x16, 0x1D); // 10Hz low pass filter
     writeSetting(0x3E, 0x01); // use X gyro oscillator
     
-    Serial.print("Current temp: ");
-    Serial.print(getTemp());
-    Serial.println("F");
+    //Serial.print("Current temp: ");
+    //Serial.print(getTemp());
+    //Serial.println("F");
     
     // TODO: We should calculate these once under known conditions and store them in eeprom
     autoZero();
@@ -60,9 +60,9 @@ void Gyro::autoZero(){
   // (note, I could not get to 50 -- my arduino locks up. so I'm leaving it at 10)
   byte loopCount = 10;
   
-  Serial.print("Starting gyro autoZero with ");
-  Serial.print(loopCount, DEC);
-  Serial.println(" iterations.");
+  //Serial.print("Starting gyro autoZero with ");
+  //Serial.print(loopCount, DEC);
+  //Serial.println(" iterations.");
   int findZero[loopCount];
   for (byte axis = PITCH; axis <= YAW; axis++){
     for (byte i=0; i<loopCount; i++){
@@ -72,10 +72,10 @@ void Gyro::autoZero(){
     }
     
     zero[axis] = findMedian(findZero, loopCount);
-    Serial.print("Zero of gyro axis ");
-    Serial.print(axis, DEC);
-    Serial.print(" is: ");
-    Serial.println(zero[axis]);
+    //Serial.print("Zero of gyro axis ");
+    //Serial.print(axis, DEC);
+    //Serial.print(" is: ");
+    //Serial.println(zero[axis]);
   }
 }
 
@@ -142,4 +142,10 @@ void Gyro::unsleep(){
   if (!_sleeping) return;
   writeSetting(0x3E, 0x00);
   _sleeping = false;
+}
+
+/////////////
+
+float Gyro::getSmoothFactor(){
+  return _smoothFactor;
 }

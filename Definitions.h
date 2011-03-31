@@ -1,3 +1,7 @@
+// Config flags
+#define SENSORS_ENABLED
+#define SERIALCONTROL_ENABLED
+
 // Global definitions
 #define ENGINE_COUNT 4
 // Speeds are in microseconds, not degrees, for greater control
@@ -9,8 +13,6 @@
 #define LEFT_REAR_MOTOR_PIN 10
 #define RIGHT_REAR_MOTOR_PIN  11
 
-#define SENSORS_ENABLED
-
 #define GYRO_ADDR 0x68
 #define ACCEL_ADDR 0x53
 
@@ -18,3 +20,4 @@
 #define ROLL 1 // y-axis
 #define YAW 2 // z-axis
 
+#define VERSION 2.3 // Emulate Aeroquad
