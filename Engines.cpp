@@ -53,7 +53,6 @@ int Engines::getEngineSpeed(byte engine){
 }
 
 void Engines::setAllSpeed(int speed){
-  Serial.println(speed);
   for (byte engine = 0; engine < ENGINE_COUNT; engine++){
     setEngineSpeed(engine, speed);
   }
