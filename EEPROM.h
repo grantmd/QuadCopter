@@ -23,7 +23,9 @@
 #include "Definitions.h"
 
 byte eeprom_read(int);
+float eeprom_read_float(int);
 void eeprom_write(int, byte);
+void eeprom_write(int, float);
 
 void eeprom_write_all();
 void eeprom_read_all();
