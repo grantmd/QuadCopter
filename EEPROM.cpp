@@ -33,12 +33,12 @@ byte eeprom_read(int address){
 float eeprom_read_float(int address){
   // a union is a datatype that allows us to write to it in bytes and read back as a float
   // (and vice versa)
-  union floatStore {
+  union floatStore{
     byte floatByte[4];
     float floatVal;
   } floatOut;
 
-  for (int i = 0; i < 4; i++){
+  for (int i=0; i<4; i++){
     floatOut.floatByte[i] = eeprom_read(address + i);
   }
   
@@ -54,14 +54,14 @@ void eeprom_write(int address, byte value){
 void eeprom_write(int address, float value){
   // a union is a datatype that allows us to write to it in bytes and read back as a float
   // (and vice versa)
-  union floatStore {
+  union floatStore{
     byte floatByte[4];
     float floatVal;
   } floatIn;
 
   floatIn.floatVal = value;
 
-  for (int i = 0; i < 4; i++){
+  for (int i=0; i<4; i++){
     eeprom_write(address + i, floatIn.floatByte[i]);
   }
 }
