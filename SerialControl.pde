@@ -102,17 +102,37 @@ void sendSerialTelemetry(){
       //_queryType = 'X';
       break;
     case 'B': // Send roll and pitch gyro PID values
+      serialPrintPID(ROLL);
+      serialPrintPID(PITCH);
+      Serial.println(1300); // TODO: Read from EEPROM
+      _queryType = 'X';
       break;
     case 'D': // Send yaw PID values
+      serialPrintPID(YAW);
+      serialPrintPID(5); // TODO: Heading hold
+      Serial.println(0, BIN);
       _queryType = 'X';
       break;
     case 'F': // Send roll and pitch auto level PID values
+      serialPrintPID(3); // TODO: LEVELROLL
+      serialPrintPID(4); // TODO: LEVELPITCH
+      serialPrintPID(6); // TODO: LEVELGYROROLL
+      serialPrintPID(7); // TODO: LEVELGYROPITCH
+      Serial.println(1000.0); // TODO: windup guard
       _queryType = 'X';
       break;
     case 'H': // Send auto level configuration values
+      serialPrintValueComma(500.0); // TODO: Read this from EEPROM
+      Serial.println(150.0); // TODO: Read this from EEPROM
+    
       _queryType = 'X';
       break;
     case 'J': // Altitude Hold
+      for(byte i=0; i<9; i++) {
+        serialPrintValueComma(0);
+      }
+      Serial.println('0');
+    
       _queryType = 'X';
       break;
     case 'L': // Send data filtering values
@@ -122,9 +142,36 @@ void sendSerialTelemetry(){
       _queryType = 'X';
       break;
     case 'N': // Send transmitter smoothing values
+      serialPrintValueComma(0); // TODO? receiver transmit factor
+      
+      serialPrintValueComma(0.0); // TODO?
+      serialPrintValueComma(0.0); // TODO?
+      serialPrintValueComma(0.0); // TODO?
+      serialPrintValueComma(0.0); // TODO?
+      serialPrintValueComma(0.0); // TODO?
+      Serial.println(0.0); // TODO?
+      
       _queryType = 'X';
       break;
     case 'P': // Send transmitter calibration data
+      serialPrintValueComma(0.0); // TODO?
+      serialPrintValueComma(0.0); // TODO?
+      
+      serialPrintValueComma(0.0); // TODO?
+      serialPrintValueComma(0.0); // TODO?
+      
+      serialPrintValueComma(0.0); // TODO?
+      serialPrintValueComma(0.0); // TODO?
+      
+      serialPrintValueComma(0.0); // TODO?
+      serialPrintValueComma(0.0); // TODO?
+      
+      serialPrintValueComma(0.0); // TODO?
+      serialPrintValueComma(0.0); // TODO?
+      
+      serialPrintValueComma(0.0); // TODO?
+      Serial.println(0.0); // TODO?
+      
       _queryType = 'X';
       break;
     case 'Q': // Send sensor data
@@ -136,10 +183,10 @@ void sendSerialTelemetry(){
       serialPrintValueComma(accel.getPitch());
       serialPrintValueComma(accel.getYaw());
       
-      serialPrintValueComma(0); // serialPrintValueComma(degrees(flightAngle->getData(ROLL)));
-      serialPrintValueComma(0); // serialPrintValueComma(degrees(flightAngle->getData(PITCH)));
+      serialPrintValueComma(0); // TODO: serialPrintValueComma(degrees(flightAngle->getData(ROLL)));
+      serialPrintValueComma(0); // TODO: serialPrintValueComma(degrees(flightAngle->getData(PITCH)));
       
-      serialPrintValueComma(0); // Heading
+      serialPrintValueComma(0); // TODO: Heading
       serialPrintValueComma(0); // Altitude hold
       Serial.print(0); // Battery monitor
       Serial.println();
@@ -150,18 +197,83 @@ void sendSerialTelemetry(){
       Serial.println('0');
       break;
     case 'S': // Send all flight data
+      serialPrintValueComma(deltaTime);
+
+      serialPrintValueComma(gyro.getRawRoll());
+      serialPrintValueComma(gyro.getRawPitch()); // Negative?
+      serialPrintValueComma(gyro.getRawYaw());
+
+      serialPrintValueComma(0); // Battery monitor
+      
+      serialPrintValueComma(0); // TODO: Motor axis commands
+      serialPrintValueComma(0); // TODO: Motor axis commands
+      serialPrintValueComma(0); // TODO: Motor axis commands
+      serialPrintValueComma(0); // TODO: Motor axis commands
+      
+      for (byte engine = 0; engine < ENGINE_COUNT; engine++){
+        serialPrintValueComma(engines.getEngineSpeed(engine));
+      }
+      
+      serialPrintValueComma(accel.getRawRoll());
+      serialPrintValueComma(accel.getRawPitch());
+      serialPrintValueComma(accel.getRawYaw());
+      
+      Serial.print(engines.isArmed(), BIN);
+      serialComma();
+      
+      serialPrintValueComma(2000); // Stable flight mode
+      
+      serialPrintValueComma(0); // HeadingMagHold
+      
+      serialPrintValueComma(0); // Alt hold data
+      Serial.print('0'); // Alt hold on
+      
+      Serial.println();
       break;
     case 'T': // Send processed transmitter values
+      serialPrintValueComma(0); // TODO? receiver transmit factor
+    
+      serialPrintValueComma(0); // TODO? receiver roll
+      serialPrintValueComma(0); // TODO? receiver pitch
+      serialPrintValueComma(0); // TODO? receiver yaw
+      
+      serialPrintValueComma(0.0); // TODO? level adjust roll
+      serialPrintValueComma(0.0); // TODO? level adjust pitch
+      
+      serialPrintValueComma(0); // TODO: motor axis roll
+      serialPrintValueComma(0); // TODO: motor axis pitch
+      Serial.println(0); // TODO: motor axis yaw
+      
       break;
     case 'U': // Send smoothed receiver with Transmitter Factor applied values
+      serialPrintValueComma(0); // TODO?
+      serialPrintValueComma(0); // TODO?
+      serialPrintValueComma(0); // TODO?
+      serialPrintValueComma(0); // TODO?
+      serialPrintValueComma(0); // TODO?
+      Serial.println(0); // TODO?
       break;
     case 'V': // Send receiver status
+      serialPrintValueComma(1000); // TODO?
+      serialPrintValueComma(1000); // TODO?
+      serialPrintValueComma(1000); // TODO?
+      serialPrintValueComma(1000); // TODO?
+      serialPrintValueComma(1000); // TODO?
+      Serial.println(1000); // TODO?
       break;
     case 'X': // Stop sending messages
       break;
     case 'Z': // Send heading
+      serialPrintValueComma(0); // TODO: receiver.getData(YAW)
+      serialPrintValueComma(0.0); // TODO: headingHold
+      serialPrintValueComma(0.0); // TODO: setHeading
+      Serial.println(0.0); // TODO: relativeHeading
       break;
     case '6': // Report remote commands
+      for (byte engine = 0; engine < ENGINE_COUNT-1; engine++){
+        serialPrintValueComma(engines.getEngineSpeed(engine)); // TODO: These should be "remote commands"
+      }
+      Serial.println(engines.getEngineSpeed(ENGINE_COUNT-1)); // TODO: These should be "remote commands"
       break;
     case '!': // Send flight software version
       Serial.println(VERSION, 1);
@@ -237,4 +349,10 @@ void serialPrintValueComma(unsigned long val){
 
 void serialComma(){
   Serial.print(',');
+}
+
+void serialPrintPID(unsigned char IDPid){
+  serialPrintValueComma(0.0); // TODO: Make real
+  serialPrintValueComma(0.0);
+  serialPrintValueComma(0.0);
 }

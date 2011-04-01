@@ -40,9 +40,12 @@ byte green_led = 13; // Motor activity
 byte system_mode = 0; // 0: Unknown, 1: Auto, 2: Manual, 3: Engine Test, 4: Sensor Test
 
 int pos = 0;
+unsigned long previousTime = 0;
+unsigned long currentTime = 0;
+unsigned long deltaTime = 0;
  
 void setup(){
-  Serial.begin(9600);
+  Serial.begin(115200);
   Wire.begin(); // For the gyro and accel
   
   // Activity LEDs
@@ -60,6 +63,11 @@ void setup(){
 }
 
 void loop(){
+  // Measure loop rate
+  currentTime = micros();
+  deltaTime = currentTime - previousTime;
+  previousTime = currentTime;
+  
   #ifdef SENSORS_ENABLED
   // Get the latest data
   gyro.updateAll();
@@ -72,5 +80,6 @@ void loop(){
   // Read serial commands and set them/reply
   readSerialCommand();
   sendSerialTelemetry();
+  delay(100);
   #endif
 } 
