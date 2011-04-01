@@ -75,7 +75,7 @@ void Accel::autoZero(){
   // We need to recalc what 1G feels like
   updateAll();
   _oneG = zero[YAW];
-  zero[YAW] = (zero[ROLL] + zero[PITCH]) / 2;
+  //zero[YAW] = (zero[ROLL] + zero[PITCH]) / 2;
 }
 
 // Updates all raw measurements from the accelerometer
@@ -94,6 +94,26 @@ void Accel::updateAll(){
 
 ///////////
 
+// Tilt off a horizontal line between the left and right engines
+// i.e. How much is the aircraft tilted forward or backward?
+int Accel::getPitch(){
+  return dataSmoothed[PITCH];
+}
+
+// Tilt off a horizontal line between the front and rear engines
+// i.e. How much is the aircraft tilted to the left or right?
+int Accel::getRoll(){
+  return dataSmoothed[ROLL];
+}
+
+// Force on a vertical line through the center of the aircraft
+// i.e. How fast are we falling/climbing?
+int Accel::getYaw(){
+  return dataSmoothed[YAW];
+}
+
+///////////
+
 int Accel::getRawPitch(){
   return dataRaw[PITCH];
 }
@@ -104,20 +124,6 @@ int Accel::getRawRoll(){
 
 int Accel::getRawYaw(){
   return dataRaw[YAW];
-}
-
-///////////
-
-int Accel::getPitch(){
-  return dataSmoothed[PITCH];
-}
-
-int Accel::getRoll(){
-  return dataSmoothed[ROLL];
-}
-
-int Accel::getYaw(){
-  return dataSmoothed[YAW];
 }
 
 /////////////

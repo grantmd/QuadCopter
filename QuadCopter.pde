@@ -48,36 +48,67 @@ void setup(){
   Serial.begin(115200);
   Wire.begin(); // For the gyro and accel
   
+  //
   // Activity LEDs
+  //
   pinMode(red_led, OUTPUT);
   pinMode(green_led, OUTPUT);
   
   digitalWrite(red_led, HIGH); // Indicate system is not ready
   
+  //
+  // TODO: Load from eeprom
+  //
+  
+  //
   // Run inits
+  //
   engines.init();
   #ifdef SENSORS_ENABLED
   gyro.init();
   accel.init();
   #endif
+  
+  //
+  // TODO: Calculate initial level and heading
+  // Like, are we on an angled surface and need to compensate for that at liftoff?
+  //
+  
+  //
+  // It's go time
+  //
+  
+  previousTime = micros();
 }
 
 void loop(){
+  //
   // Measure loop rate
+  //
   currentTime = micros();
   deltaTime = currentTime - previousTime;
   previousTime = currentTime;
   
-  #ifdef SENSORS_ENABLED
+  //
   // Get the latest data
+  //
+  #ifdef SENSORS_ENABLED
   gyro.updateAll();
   accel.updateAll();
   #endif
 
-  // Decide what to do and do it
+  //
+  // TODO: Decide what to do and do it (flight control)
+  //
   
-  #ifdef SERIALCONTROL_ENABLED
+  //
+  // TODO: Take commands from.... where? (flight command)
+  //
+  
+  //
   // Read serial commands and set them/reply
+  //
+  #ifdef SERIALCONTROL_ENABLED
   readSerialCommand();
   sendSerialTelemetry();
   delay(100);

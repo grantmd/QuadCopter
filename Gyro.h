@@ -32,16 +32,16 @@ class Gyro : public I2C
     
     void updateAll();
     
-    // The raw values from the sensor
-    int getRawRoll();
-    int getRawPitch();
-    int getRawYaw();
-    
     // Smoothed/compensated values
     int getTemp();
     int getRoll();
     int getPitch();
     int getYaw();
+    
+    // The raw values from the sensor
+    int getRawRoll();
+    int getRawPitch();
+    int getRawYaw();
     
     void sleep();
     void unsleep();

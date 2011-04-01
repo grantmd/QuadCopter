@@ -95,6 +95,35 @@ void Gyro::updateAll(){
 
 ///////////
 
+int Gyro::getTemp(){
+  sendReadRequest(0x1B);
+  temp = readWord();
+  temp = 35.0 + ((temp + 13200) / 280.0); // -13200 == 35C, 280 == Each degree
+  temp = 32 + (temp * 1.8); // Convert to F
+  
+  return temp;
+}
+
+// Rate of rotation on a horizontal line drawn between the left and right engines
+// i.e. How fast are we currently rotating forwards or backwards?
+int Gyro::getPitch(){
+  return dataSmoothed[PITCH];
+}
+
+// Rate of rotation on a horizontal line drawn between the front and rear engines
+// i.e. How fast are we currently rotating left or right?
+int Gyro::getRoll(){
+  return dataSmoothed[ROLL];
+}
+
+// Rate of rotation on a vertial line drawn through the center of the craft
+// i.e. How fast are we currently spinning left or right?
+int Gyro::getYaw(){
+  return dataSmoothed[YAW];
+}
+
+///////////
+
 int Gyro::getRawPitch(){
   return dataRaw[PITCH];
 }
@@ -105,29 +134,6 @@ int Gyro::getRawRoll(){
 
 int Gyro::getRawYaw(){
   return dataRaw[YAW];
-}
-
-///////////
-
-int Gyro::getTemp(){
-  sendReadRequest(0x1B);
-  temp = readWord();
-  temp = 35.0 + ((temp + 13200) / 280.0); // -13200 == 35C, 280 == Each degree
-  temp = 32 + (temp * 1.8); // Convert to F
-  
-  return temp;
-}
-
-int Gyro::getPitch(){
-  return dataSmoothed[PITCH];
-}
-
-int Gyro::getRoll(){
-  return dataSmoothed[ROLL];
-}
-
-int Gyro::getYaw(){
-  return dataSmoothed[YAW];
 }
 
 /////////////
