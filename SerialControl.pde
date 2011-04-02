@@ -77,11 +77,9 @@ void readSerialCommand(){
         break;
       case 'b': // calibrate gyros
         gyro.autoZero();
-        // TODO: Store to EEPROM
         break;
       case 'c': // calibrate accels
         accel.autoZero();
-        // TODO: Store to EEPROM
         break;
       case 'd': // send aref
         // IGNORED
