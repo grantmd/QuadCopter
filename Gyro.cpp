@@ -26,7 +26,7 @@
 
 Gyro::Gyro() : I2C(){
   _scaleFactor = radians(1.0 / 14.375); // ITG3200 14.375 LSBs per °/sec
-  _smoothFactor = 0.75;
+  _smoothFactor = 1.0;
   _sleeping = false;
 }
 
@@ -119,18 +119,21 @@ int Gyro::getTemp(){
 
 // Rate of rotation on a horizontal line drawn between the left and right engines
 // i.e. How fast are we currently rotating forwards or backwards?
+// Positive numbers are forward, negative is backward
 int Gyro::getPitch(){
   return dataSmoothed[PITCH];
 }
 
 // Rate of rotation on a horizontal line drawn between the front and rear engines
 // i.e. How fast are we currently rotating left or right?
+// Positive to the left, negative to the right
 int Gyro::getRoll(){
   return dataSmoothed[ROLL];
 }
 
 // Rate of rotation on a vertial line drawn through the center of the craft
 // i.e. How fast are we currently spinning left or right?
+// Negative to the left, positive to the right
 int Gyro::getYaw(){
   return dataSmoothed[YAW];
 }
