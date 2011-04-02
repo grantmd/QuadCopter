@@ -45,6 +45,22 @@ float eeprom_read_float(int address){
   return floatOut.floatVal;
 }
 
+// Read 2 bytes from eeprom and make it an int
+float eeprom_read_int(int address){
+  // a union is a datatype that allows us to write to it in bytes and read back as an int
+  // (and vice versa)
+  union intStore{
+    byte intByte[2];
+    float intVal;
+  } intOut;
+
+  for (int i=0; i<2; i++){
+    intOut.intByte[i] = eeprom_read(address + i);
+  }
+  
+  return intOut.intVal;
+}
+
 // Write a single value to eeprom
 void eeprom_write(int address, byte value){
   EEPROM.write(address, value);
@@ -63,6 +79,20 @@ void eeprom_write(int address, float value){
 
   for (int i=0; i<4; i++){
     eeprom_write(address + i, floatIn.floatByte[i]);
+  }
+}
+
+// Turn an int into 2 bytes and write them to eeprom
+float eeprom_write(int address, int value){
+  // a union is a datatype that allows us to write to it in bytes and read back as an int
+  // (and vice versa)
+  union intStore{
+    byte intByte[2];
+    float intVal;
+  } intIn;
+
+  for (int i=0; i<2; i++){
+    eeprom_write(address + i, intIn.intByte[i]);
   }
 }
 

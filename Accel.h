@@ -28,6 +28,7 @@ class Accel : public I2C
   public:
     Accel();
     void init();
+    void calibrate();
     void autoZero();
     
     void updateAll();

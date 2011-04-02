@@ -22,6 +22,7 @@
 #include "Accel.h"
 #include "I2C.h"
 #include "Utils.h"
+#include "EEPROM.h"
 
 Accel::Accel() : I2C(){
   _scaleFactor = G_2_MPS2(4.0 / 1024); // ±2 g is a range of 4, converted to Gs, and then converted to m/s2
@@ -41,9 +42,21 @@ void Accel::init(){
     writeSetting(0x2C, 0x0A); // 100Hz low pass filter
     writeSetting(0x31, 0x00); // ±2 g
     
-    // TODO: We should calculate these once under known conditions and store them in eeprom
-    autoZero();
+    // Load calibration data from eeprom
+    calibrate();
   }
+}
+
+void Accel::calibrate(){
+  // load from eeprom
+  zero[PITCH] = eeprom_read_int(EEPROM_ADDR_ACCEL_PITCH);
+  zero[ROLL] = eeprom_read_int(EEPROM_ADDR_ACCEL_ROLL);
+  zero[YAW] = eeprom_read_int(EEPROM_ADDR_ACCEL_YAW);
+  
+  // We need to recalc what 1G feels like
+  updateAll();
+  _oneG = zero[YAW];
+  //zero[YAW] = (zero[ROLL] + zero[PITCH]) / 2;
 }
 
 // Calculate zero for all 3 axis, storing it for later measurements
@@ -72,10 +85,10 @@ void Accel::autoZero(){
     //Serial.println(zero[axis]);
   }
   
-  // We need to recalc what 1G feels like
-  updateAll();
-  _oneG = zero[YAW];
-  //zero[YAW] = (zero[ROLL] + zero[PITCH]) / 2;
+  // Write to eeprom
+  eeprom_write(EEPROM_ADDR_ACCEL_PITCH, zero[PITCH]);
+  eeprom_write(EEPROM_ADDR_ACCEL_ROLL, zero[ROLL]);
+  eeprom_write(EEPROM_ADDR_ACCEL_YAW, zero[YAW]);
 }
 
 // Updates all raw measurements from the accelerometer

@@ -28,6 +28,7 @@ class Gyro : public I2C
   public:
     Gyro();
     void init();
+    void calibrate();
     void autoZero();
     
     void updateAll();
