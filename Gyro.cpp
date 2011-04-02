@@ -58,6 +58,13 @@ void Gyro::calibrate(){
   zero[PITCH] = eeprom_read_int(EEPROM_ADDR_GYRO_PITCH);
   zero[ROLL] = eeprom_read_int(EEPROM_ADDR_GYRO_ROLL);
   zero[YAW] = eeprom_read_int(EEPROM_ADDR_GYRO_YAW);
+  
+  //Serial.print("Gyro zeros: ");
+  //Serial.print(zero[PITCH]);
+  //Serial.print(",");
+  //Serial.print(zero[ROLL]);
+  //Serial.print(",");
+  //Serial.println(zero[YAW]);
 }
 
 // Calculate zero for all 3 axis, storing it for later measurements

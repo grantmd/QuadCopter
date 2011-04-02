@@ -46,12 +46,12 @@ float eeprom_read_float(int address){
 }
 
 // Read 2 bytes from eeprom and make it an int
-float eeprom_read_int(int address){
+int eeprom_read_int(int address){
   // a union is a datatype that allows us to write to it in bytes and read back as an int
   // (and vice versa)
   union intStore{
     byte intByte[2];
-    float intVal;
+    int intVal;
   } intOut;
 
   for (int i=0; i<2; i++){
@@ -88,8 +88,10 @@ float eeprom_write(int address, int value){
   // (and vice versa)
   union intStore{
     byte intByte[2];
-    float intVal;
+    int intVal;
   } intIn;
+  
+  intIn.intVal = value;
 
   for (int i=0; i<2; i++){
     eeprom_write(address + i, intIn.intByte[i]);

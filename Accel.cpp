@@ -53,6 +53,13 @@ void Accel::calibrate(){
   zero[ROLL] = eeprom_read_int(EEPROM_ADDR_ACCEL_ROLL);
   zero[YAW] = eeprom_read_int(EEPROM_ADDR_ACCEL_YAW);
   
+  //Serial.print("Accel zeros: ");
+  //Serial.print(zero[PITCH]);
+  //Serial.print(",");
+  //Serial.print(zero[ROLL]);
+  //Serial.print(",");
+  //Serial.println(zero[YAW]);
+  
   // We need to recalc what 1G feels like
   updateAll();
   _oneG = zero[YAW];
