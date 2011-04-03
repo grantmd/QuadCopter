@@ -34,9 +34,9 @@ class Accel : public I2C
     void updateAll();
     
     // Smoothed/compensated values
-    int getRoll();
-    int getPitch();
-    int getYaw();
+    float getRoll();
+    float getPitch();
+    float getYaw();
     
     // The raw values from the sensor
     int getRawRoll();

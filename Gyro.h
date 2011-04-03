@@ -35,9 +35,9 @@ class Gyro : public I2C
     
     // Smoothed/compensated values
     int getTemp();
-    int getRoll();
-    int getPitch();
-    int getYaw();
+    float getRoll();
+    float getPitch();
+    float getYaw();
     
     // The raw values from the sensor
     int getRawRoll();

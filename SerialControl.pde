@@ -197,9 +197,10 @@ void sendSerialTelemetry(){
     case 'S': // Send all flight data
       serialPrintValueComma(deltaTime);
 
-      serialPrintValueComma(gyro.getRawRoll());
-      serialPrintValueComma(gyro.getRawPitch()); // Negative?
-      serialPrintValueComma(gyro.getRawYaw());
+      // TODO: These are "raw" in the aeroquad version, but that's pretty useless
+      serialPrintValueComma(gyro.getRoll());
+      serialPrintValueComma(gyro.getPitch()); // Negative?
+      serialPrintValueComma(gyro.getYaw());
 
       serialPrintValueComma(0); // Battery monitor
       
@@ -212,9 +213,10 @@ void sendSerialTelemetry(){
         serialPrintValueComma(engines.getEngineSpeed(engine));
       }
       
-      serialPrintValueComma(accel.getRawRoll());
-      serialPrintValueComma(accel.getRawPitch());
-      serialPrintValueComma(accel.getRawYaw());
+      // TODO: These are "raw" in the aeroquad version, but that's pretty useless
+      serialPrintValueComma(accel.getRoll());
+      serialPrintValueComma(accel.getPitch());
+      serialPrintValueComma(accel.getYaw());
       
       Serial.print(engines.isArmed(), BIN);
       serialComma();

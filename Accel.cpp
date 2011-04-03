@@ -118,19 +118,19 @@ void Accel::updateAll(){
 
 // Tilt off a horizontal line between the left and right engines
 // i.e. How much is the aircraft tilted forward or backward?
-int Accel::getPitch(){
+float Accel::getPitch(){
   return dataSmoothed[PITCH];
 }
 
 // Tilt off a horizontal line between the front and rear engines
 // i.e. How much is the aircraft tilted to the left or right?
-int Accel::getRoll(){
+float Accel::getRoll(){
   return dataSmoothed[ROLL];
 }
 
 // Force on a vertical line through the center of the aircraft
 // i.e. How fast are we falling/climbing?
-int Accel::getYaw(){
+float Accel::getYaw(){
   return dataSmoothed[YAW];
 }
 
