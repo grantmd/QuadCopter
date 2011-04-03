@@ -38,6 +38,8 @@ void Accel::init(){
     Serial.println("ACCEL NOT CONNECTED!");
   }
   else{
+    writeSetting(0x2D, 0x00); // Shut down
+    writeSetting(0x2D, 0x16); // Reset
     writeSetting(0x2D, 0x08); // Power up, measure mode
     writeSetting(0x2C, 0x0A); // 100Hz low pass filter
     writeSetting(0x31, 0x00); // ±2 g
@@ -81,7 +83,7 @@ void Accel::autoZero(){
   for (byte axis = PITCH; axis <= YAW; axis++){
     for (byte i=0; i<loopCount; i++){
       sendReadRequest(0x32 + (axis * 2));
-      findZero[i] = readWord();
+      findZero[i] = readWordFlip();
       delay(10);
     }
     
@@ -105,7 +107,7 @@ void Accel::updateAll(){
   requestBytes(6);
 
   for (byte axis = PITCH; axis <= YAW; axis++) {
-     dataRaw[axis] = zero[axis] - readNextWord();
+     dataRaw[axis] = zero[axis] - readNextWordFlip();
      dataSmoothed[axis] = filterSmooth((float)dataRaw[axis] * _scaleFactor, dataSmoothed[axis], _smoothFactor);
   }
   

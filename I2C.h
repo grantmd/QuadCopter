@@ -33,11 +33,13 @@ class I2C
     byte writeSetting(byte, byte);
     byte sendReadRequest(byte);
     word readWord();
+    word readWordFlip();
     byte readByte();
     void requestBytes(byte);
     
     byte readNextByte();
     word readNextWord();
+    word readNextWordFlip();
     
   private:
     byte _address;

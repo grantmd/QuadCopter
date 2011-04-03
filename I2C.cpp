@@ -61,6 +61,14 @@ word I2C::readWord(){
   return ((Wire.receive() << 8) | Wire.receive());
 }
 
+// Request 2 bytes and read it
+word I2C::readWordFlip(){
+  requestBytes(2);
+  byte one = Wire.receive();
+  byte two = Wire.receive();
+  return ((two << 8) | one);
+}
+
 // Request a byte and read it
 byte I2C::readByte(){
   requestBytes(1);
@@ -69,6 +77,7 @@ byte I2C::readByte(){
 
 // Request some number of bytes
 void I2C::requestBytes(byte bytes){
+  Wire.beginTransmission(_address);
   Wire.requestFrom(_address, bytes);
 }
 
@@ -80,5 +89,12 @@ byte I2C::readNextByte(){
 // Read the next available 2 bytes
 word I2C::readNextWord(){
   return ((Wire.receive() << 8) | Wire.receive());
+}
+
+// Read the next available 2 bytes
+word I2C::readNextWordFlip(){
+  byte one = Wire.receive();
+  byte two = Wire.receive();
+  return ((two << 8) | one);
 }
 
