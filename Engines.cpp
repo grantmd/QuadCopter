@@ -68,6 +68,10 @@ void Engines::setThrottle(int new_throttle){
   }
 }
 
+int Engines::getThrottle(){
+  return throttle;
+}
+
 void Engines::arm(byte method){
   if (_armed) return;
   
