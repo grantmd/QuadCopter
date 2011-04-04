@@ -199,7 +199,7 @@ void sendSerialTelemetry(){
 
       // TODO: These are "raw" in the aeroquad version, but that's pretty useless
       serialPrintValueComma(gyro.getRoll());
-      serialPrintValueComma(gyro.getPitch()); // Negative?
+      serialPrintValueComma(gyro.getPitch());
       serialPrintValueComma(gyro.getYaw());
 
       serialPrintValueComma(0); // Battery monitor

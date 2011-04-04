@@ -79,7 +79,7 @@ void Gyro::autoZero(){
   //Serial.print(loopCount, DEC);
   //Serial.println(" iterations.");
   int findZero[loopCount];
-  for (byte axis = PITCH; axis <= YAW; axis++){
+  for (byte axis = ROLL; axis <= YAW; axis++){
     for (byte i=0; i<loopCount; i++){
       sendReadRequest(0x1D + (axis * 2));
       findZero[i] = readWord();
@@ -105,7 +105,7 @@ void Gyro::updateAll(){
   sendReadRequest(0x1D);
   requestBytes(6);
 
-  for (byte axis = PITCH; axis <= YAW; axis++) {
+  for (byte axis = ROLL; axis <= YAW; axis++){
      dataRaw[axis] = zero[axis] - readNextWord();
      dataSmoothed[axis] = filterSmooth((float)dataRaw[axis] * _scaleFactor, dataSmoothed[axis], _smoothFactor);
   }
@@ -125,20 +125,23 @@ int Gyro::getTemp(){
 }
 
 // Rate of rotation on a horizontal line drawn between the left and right engines
+// rotational rate about the Y (pitch)
 // i.e. How fast are we currently rotating forwards or backwards?
-// Positive numbers are forward, negative is backward
+// Negative numbers are forward, positive is backward
 float Gyro::getPitch(){
   return dataSmoothed[PITCH];
 }
 
 // Rate of rotation on a horizontal line drawn between the front and rear engines
+// rotational rate about the X (roll)
 // i.e. How fast are we currently rotating left or right?
 // Positive to the left, negative to the right
 float Gyro::getRoll(){
   return dataSmoothed[ROLL];
 }
 
-// Rate of rotation on a vertial line drawn through the center of the craft
+// Rate of rotation on a vertical line drawn through the center of the craft
+// rotational rate about the Z (yaw)
 // i.e. How fast are we currently spinning left or right?
 // Negative to the left, positive to the right
 float Gyro::getYaw(){

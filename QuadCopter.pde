@@ -111,6 +111,5 @@ void loop(){
   #ifdef SERIALCONTROL_ENABLED
   readSerialCommand();
   sendSerialTelemetry();
-  delay(100);
   #endif
 } 

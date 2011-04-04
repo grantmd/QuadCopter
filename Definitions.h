@@ -37,8 +37,8 @@
 #define GYRO_ADDR 0x68
 #define ACCEL_ADDR 0x53
 
-#define PITCH 0
-#define ROLL 1
+#define ROLL 0
+#define PITCH 1
 #define YAW 2
 
 #define VERSION 2.3 // Emulate Aeroquad

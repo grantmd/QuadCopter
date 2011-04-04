@@ -80,7 +80,7 @@ void Accel::autoZero(){
   //Serial.print(loopCount, DEC);
   //Serial.println(" iterations.");
   int findZero[loopCount];
-  for (byte axis = PITCH; axis <= YAW; axis++){
+  for (byte axis = ROLL; axis <= YAW; axis++){
     for (byte i=0; i<loopCount; i++){
       sendReadRequest(0x32 + (axis * 2));
       findZero[i] = readWordFlip();
@@ -106,7 +106,7 @@ void Accel::updateAll(){
   sendReadRequest(0x32);
   requestBytes(6);
 
-  for (byte axis = PITCH; axis <= YAW; axis++) {
+  for (byte axis = ROLL; axis <= YAW; axis++) {
      dataRaw[axis] = zero[axis] - readNextWordFlip();
      dataSmoothed[axis] = filterSmooth((float)dataRaw[axis] * _scaleFactor, dataSmoothed[axis], _smoothFactor);
   }
@@ -116,14 +116,16 @@ void Accel::updateAll(){
 
 ///////////
 
-// Tilt off a horizontal line between the left and right engines
-// i.e. How much is the aircraft tilted forward or backward?
+// Rotation amount on a horizontal line between the left and right engines
+// i.e. Is the left-right (Y) axis pointed up or down?
+// Positive is right-side up, negative is left-side up
 float Accel::getPitch(){
   return dataSmoothed[PITCH];
 }
 
-// Tilt off a horizontal line between the front and rear engines
-// i.e. How much is the aircraft tilted to the left or right?
+// Rotation amount on a horizontal line drawn between the front and rear engines
+// i.e. Is the forward (X) axis pointed up or down?
+// Positive is down, negative is up
 float Accel::getRoll(){
   return dataSmoothed[ROLL];
 }
