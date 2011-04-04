@@ -98,7 +98,7 @@ void loop(){
   #ifdef SENSORS_ENABLED
   gyro.updateAll();
   accel.updateAll();
-  imu.update(gyro.getRoll(), gyro.getPitch(), gyro.getYaw(), accel.getXAngle(), accel.getYAngle(), accel.getZAngle());
+  imu.update(deltaTime/1000, gyro.getRoll(), gyro.getPitch(), gyro.getYaw(), accel.getXAngle(), accel.getYAngle(), accel.getZAngle());
   #endif
 
   //
