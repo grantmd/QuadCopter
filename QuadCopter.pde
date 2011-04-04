@@ -25,8 +25,10 @@
 #ifdef SENSORS_ENABLED
 #include "Gyro.h"
 #include "Accel.h"
+#include "IMU.h"
 Gyro gyro;
 Accel accel;
+IMU imu;
 #endif
 
 #include "Engines.h"
@@ -43,6 +45,7 @@ int pos = 0;
 unsigned long previousTime = 0;
 unsigned long currentTime = 0;
 unsigned long deltaTime = 0;
+unsigned long serialTime = 0;
  
 void setup(){
   Serial.begin(115200);
@@ -95,6 +98,7 @@ void loop(){
   #ifdef SENSORS_ENABLED
   gyro.updateAll();
   accel.updateAll();
+  imu.update(gyro.getRoll(), gyro.getPitch(), gyro.getYaw(), accel.getXAngle(), accel.getYAngle(), accel.getZAngle());
   #endif
 
   //
@@ -109,7 +113,11 @@ void loop(){
   // Read serial commands and set them/reply
   //
   #ifdef SERIALCONTROL_ENABLED
-  readSerialCommand();
-  sendSerialTelemetry();
+  if (currentTime > serialTime){
+    serialTime = currentTime + SERIAL_RATE;
+    
+    readSerialCommand();
+    sendSerialTelemetry();
+  }
   #endif
 } 

@@ -33,6 +33,10 @@ class Accel : public I2C
     
     void updateAll();
     
+    float getXAngle();
+    float getYAngle();
+    float getZAngle();
+    
     // Smoothed/compensated values
     float getRoll();
     float getPitch();
@@ -44,6 +48,7 @@ class Accel : public I2C
     int getRawYaw();
     
     float getSmoothFactor();
+    float getOneG();
     
   private:
     I2C _i2c;
@@ -58,6 +63,8 @@ class Accel : public I2C
     long int _lastMeasureTime;
     
     float _oneG;
+    
+    float toDegrees(float);
 };
 
 #endif

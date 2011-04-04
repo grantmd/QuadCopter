@@ -214,9 +214,9 @@ void sendSerialTelemetry(){
       }
       
       // TODO: These are "raw" in the aeroquad version, but that's pretty useless
-      serialPrintValueComma(accel.getRoll());
-      serialPrintValueComma(accel.getPitch());
-      serialPrintValueComma(accel.getYaw());
+      serialPrintValueComma(imu.getRoll());
+      serialPrintValueComma(imu.getPitch());
+      serialPrintValueComma(imu.getHeading());
       
       Serial.print(engines.isArmed(), BIN);
       serialComma();

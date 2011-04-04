@@ -51,21 +51,20 @@ void Accel::init(){
 
 void Accel::calibrate(){
   // load from eeprom
-  zero[PITCH] = eeprom_read_int(EEPROM_ADDR_ACCEL_PITCH);
-  zero[ROLL] = eeprom_read_int(EEPROM_ADDR_ACCEL_ROLL);
-  zero[YAW] = eeprom_read_int(EEPROM_ADDR_ACCEL_YAW);
+  zero[XAXIS] = eeprom_read_int(EEPROM_ADDR_ACCEL_PITCH);
+  zero[YAXIS] = eeprom_read_int(EEPROM_ADDR_ACCEL_ROLL);
+  zero[ZAXIS] = eeprom_read_int(EEPROM_ADDR_ACCEL_YAW);
   
-  //Serial.print("Accel zeros: ");
-  //Serial.print(zero[PITCH]);
-  //Serial.print(",");
-  //Serial.print(zero[ROLL]);
-  //Serial.print(",");
-  //Serial.println(zero[YAW]);
+  /*Serial.print("Accel zeros: ");
+  Serial.print(zero[PITCH]);
+  Serial.print(",");
+  Serial.print(zero[ROLL]);
+  Serial.print(",");
+  Serial.println(zero[YAW]);*/
   
   // We need to recalc what 1G feels like
   updateAll();
-  _oneG = zero[YAW];
-  //zero[YAW] = (zero[ROLL] + zero[PITCH]) / 2;
+  _oneG = zero[ZAXIS];
 }
 
 // Calculate zero for all 3 axis, storing it for later measurements
@@ -80,7 +79,7 @@ void Accel::autoZero(){
   //Serial.print(loopCount, DEC);
   //Serial.println(" iterations.");
   int findZero[loopCount];
-  for (byte axis = ROLL; axis <= YAW; axis++){
+  for (byte axis = XAXIS; axis <= ZAXIS; axis++){
     for (byte i=0; i<loopCount; i++){
       sendReadRequest(0x32 + (axis * 2));
       findZero[i] = readWordFlip();
@@ -88,16 +87,18 @@ void Accel::autoZero(){
     }
     
     zero[axis] = findMedian(findZero, loopCount);
-    //Serial.print("Zero of accel axis ");
-    //Serial.print(axis, DEC);
-    //Serial.print(" is: ");
-    //Serial.println(zero[axis]);
+    /*Serial.print("Zero of accel axis ");
+    Serial.print(axis, DEC);
+    Serial.print(" is: ");
+    Serial.println(zero[axis]);*/
   }
   
   // Write to eeprom
-  eeprom_write(EEPROM_ADDR_ACCEL_PITCH, zero[PITCH]);
-  eeprom_write(EEPROM_ADDR_ACCEL_ROLL, zero[ROLL]);
-  eeprom_write(EEPROM_ADDR_ACCEL_YAW, zero[YAW]);
+  eeprom_write(EEPROM_ADDR_ACCEL_PITCH, zero[XAXIS]);
+  eeprom_write(EEPROM_ADDR_ACCEL_ROLL, zero[YAXIS]);
+  eeprom_write(EEPROM_ADDR_ACCEL_YAW, zero[ZAXIS]);
+  
+  _oneG = zero[ZAXIS];
 }
 
 // Updates all raw measurements from the accelerometer
@@ -106,7 +107,7 @@ void Accel::updateAll(){
   sendReadRequest(0x32);
   requestBytes(6);
 
-  for (byte axis = ROLL; axis <= YAW; axis++) {
+  for (byte axis = XAXIS; axis <= ZAXIS; axis++) {
      dataRaw[axis] = zero[axis] - readNextWordFlip();
      dataSmoothed[axis] = filterSmooth((float)dataRaw[axis] * _scaleFactor, dataSmoothed[axis], _smoothFactor);
   }
@@ -116,42 +117,72 @@ void Accel::updateAll(){
 
 ///////////
 
+//
+// Now, either I am doing something wrong, there is something wrong with my board, or I don't understand how these things work...
+// But the pitch/roll/yaw terms make no sense to me here. They are left below, for aeroquad compatability, but I have added these
+// angle functions to calculate how much that axis is off center.
+//
+// Return values are in degrees, from -180 to 180.
+//
+
+float Accel::getXAngle(){
+  return toDegrees(dataSmoothed[XAXIS]);
+}
+
+float Accel::getYAngle(){
+  return toDegrees(dataSmoothed[YAXIS]);
+}
+
+float Accel::getZAngle(){
+  return toDegrees(dataSmoothed[ZAXIS]);
+}
+
+float Accel::toDegrees(float value){
+  return (value + 9.80665) * 360 / 19.6133 - 180;
+}
+
+///////////
+
 // Rotation amount on a horizontal line between the left and right engines
 // i.e. Is the left-right (Y) axis pointed up or down?
 // Positive is right-side up, negative is left-side up
 float Accel::getPitch(){
-  return dataSmoothed[PITCH];
+  return dataSmoothed[YAXIS];
 }
 
 // Rotation amount on a horizontal line drawn between the front and rear engines
 // i.e. Is the forward (X) axis pointed up or down?
 // Positive is down, negative is up
 float Accel::getRoll(){
-  return dataSmoothed[ROLL];
+  return dataSmoothed[XAXIS];
 }
 
 // Force on a vertical line through the center of the aircraft
 // i.e. How fast are we falling/climbing?
 float Accel::getYaw(){
-  return dataSmoothed[YAW];
+  return dataSmoothed[ZAXIS];
 }
 
 ///////////
 
 int Accel::getRawPitch(){
-  return dataRaw[PITCH];
+  return dataRaw[YAXIS];
 }
 
 int Accel::getRawRoll(){
-  return dataRaw[ROLL];
+  return dataRaw[XAXIS];
 }
 
 int Accel::getRawYaw(){
-  return dataRaw[YAW];
+  return dataRaw[ZAXIS];
 }
 
 /////////////
 
 float Accel::getSmoothFactor(){
   return _smoothFactor;
+}
+
+float Accel::getOneG(){
+  return _oneG;
 }

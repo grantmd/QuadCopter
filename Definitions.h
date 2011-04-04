@@ -41,4 +41,10 @@
 #define PITCH 1
 #define YAW 2
 
+#define XAXIS 0
+#define YAXIS 1
+#define ZAXIS 2
+
 #define VERSION 2.3 // Emulate Aeroquad
+
+#define SERIAL_RATE 100000 // How long between running the serial code?
