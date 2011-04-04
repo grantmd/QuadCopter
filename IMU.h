@@ -27,19 +27,19 @@ class IMU
   public:
     IMU();
     
-    void update(float, float, float, float, float, float);
+    void update(int, float, float, float, float, float, float);
     
     float getRoll();
     float getPitch();
     float getHeading();
   
   private:
-    void updateAxis(byte, float, float);
+    void updateAxis(byte, int, float, float);
   
     float data[3];
     
-    float _dt; // Constant loop rate
-    float _timeConstant; // How much bias to accel vs gyro?
+    float _tau; // How much bias to accel vs gyro?
+    float _dtGyro; // Update rate of the gyro
 };
 
 #endif

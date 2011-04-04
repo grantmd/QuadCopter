@@ -30,33 +30,38 @@ IMU::IMU(){
     data[axis] = 0.0;
   }
   
-  _dt = 0.01;
-  _timeConstant = 0.98;
+  _tau = 0.95;
+  _dtGyro = 0.1; // 1hKz
 }
 
 // Update the filter based on most recent values
-void IMU::update(float gx, float gy, float gz, float ax, float ay, float az){
-  updateAxis(ROLL, gx, ay);
-  updateAxis(PITCH, gy, ax);
-  updateAxis(YAW, gz, az);
+void IMU::update(int dT, float gx, float gy, float gz, float ax, float ay, float az){
+  updateAxis(ROLL, dT, gx, ay);
+  updateAxis(PITCH, dT, gy, ax);
+  //updateAxis(YAW, dT, gz, az);
 }
 
-// Get filtered pitch roll
+// Get filtered roll angle
+// Positive left, negative right
 float IMU::getRoll(){
   return data[ROLL];
 }
 
 // Get filtered pitch angle
+// Positive forward, negative backward
 float IMU::getPitch(){
   return data[PITCH];
 }
 
 // This doesn't work!
 float IMU::getHeading(){
-  return data[YAW];
+  return 0;
+  //return data[YAW];
 }
 
 // Update an axis using the complementary filter
-void IMU::updateAxis(byte axis, float gyro, float accel){
-  data[axis] = (_timeConstant * (data[axis] + (gyro * _dt))) + ((1 - _timeConstant) * accel);
+void IMU::updateAxis(byte axis, int dT, float gyro, float accel){
+  float a = _tau / (_tau + _dtGyro);
+  float b = 1 - a;
+  data[axis] = (a * (data[axis] + (gyro * dT))) + (b * accel);
 }

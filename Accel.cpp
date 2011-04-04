@@ -137,6 +137,7 @@ float Accel::getZAngle(){
   return toDegrees(dataSmoothed[ZAXIS]);
 }
 
+// Map -9.8m/s2 to -180 degrees, and +9.8ms/2 to +180 degrees
 float Accel::toDegrees(float value){
   return (value + 9.80665) * 360 / 19.6133 - 180;
 }
