@@ -90,6 +90,11 @@ void readSerialCommand(){
       case '~': // read Camera values 
         // IGNORED
         break;
+      
+      // The following modes are my own
+      case '$': // Set throttle
+        engines.setThrottle(readIntSerial());
+        break;
     }
   }
 }
@@ -181,8 +186,8 @@ void sendSerialTelemetry(){
       serialPrintValueComma(accel.getPitch());
       serialPrintValueComma(accel.getYaw());
       
-      serialPrintValueComma(0); // TODO: serialPrintValueComma(degrees(flightAngle->getData(ROLL)));
-      serialPrintValueComma(0); // TODO: serialPrintValueComma(degrees(flightAngle->getData(PITCH)));
+      serialPrintValueComma(imu.getRoll());
+      serialPrintValueComma(imu.getPitch());
       
       serialPrintValueComma(0); // TODO: Heading
       serialPrintValueComma(0); // Altitude hold
@@ -198,9 +203,9 @@ void sendSerialTelemetry(){
       serialPrintValueComma(deltaTime);
 
       // TODO: These are "raw" in the aeroquad version, but that's pretty useless
-      serialPrintValueComma(gyro.getRoll());
-      serialPrintValueComma(gyro.getPitch());
-      serialPrintValueComma(gyro.getYaw());
+      serialPrintValueComma(gyro.getRawRoll());
+      serialPrintValueComma(gyro.getRawPitch());
+      serialPrintValueComma(gyro.getRawYaw());
 
       serialPrintValueComma(0); // Battery monitor
       
@@ -214,9 +219,9 @@ void sendSerialTelemetry(){
       }
       
       // TODO: These are "raw" in the aeroquad version, but that's pretty useless
-      serialPrintValueComma(imu.getRoll());
-      serialPrintValueComma(imu.getPitch());
-      serialPrintValueComma(imu.getHeading());
+      serialPrintValueComma(accel.getRawRoll());
+      serialPrintValueComma(accel.getRawPitch());
+      serialPrintValueComma(accel.getRawYaw());
       
       Serial.print(engines.isArmed(), BIN);
       serialComma();
@@ -296,6 +301,23 @@ void sendSerialTelemetry(){
     case '`': // Send Camera values
       // IGNORED
       break;
+    
+    // The following modes are my own
+    case '&':
+      serialPrintValueComma(deltaTime);
+      serialPrintValueComma(imu.getRoll());
+      serialPrintValueComma(imu.getPitch());
+      serialPrintValueComma(imu.getHeading());
+      
+      serialPrintValueComma(engines.getThrottle());
+      
+      for (byte engine = 0; engine < ENGINE_COUNT; engine++){
+        serialPrintValueComma(engines.getEngineSpeed(engine));
+      }
+      
+      Serial.println(engines.isArmed(), BIN);
+      
+      break;
   }
 }
 
@@ -320,6 +342,29 @@ float readFloatSerial(){
   while ((index == 0 || data[index-1] != ';') && (timeout < 5) && (index < sizeof(data)-1));
   data[index] = '\0';
   return atof(data);
+}
+
+// Used to read integer values from the serial port
+int readIntSerial(){
+  #define SERIALINTSIZE 7
+  byte index = 0;
+  byte timeout = 0;
+  char data[SERIALINTSIZE] = "";
+
+  do {
+    if (Serial.available() == 0) {
+      delay(10);
+      timeout++;
+    }
+    else {
+      data[index] = Serial.read();
+      timeout = 0;
+      index++;
+    }
+  }  
+  while ((index == 0 || data[index-1] != ';') && (timeout < 5) && (index < sizeof(data)-1));
+  data[index] = '\0';
+  return atoi(data);
 }
 
 void serialPrintValueComma(float val){
