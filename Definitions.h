@@ -34,6 +34,11 @@
 #define LEFT_REAR_MOTOR_PIN 11
 #define RIGHT_REAR_MOTOR_PIN  3
 
+#define LEFT_FRONT_MOTOR 0
+#define RIGHT_FRONT_MOTOR  1
+#define LEFT_REAR_MOTOR 2
+#define RIGHT_REAR_MOTOR 3
+
 #define GYRO_ADDR 0x68
 #define ACCEL_ADDR 0x53
 

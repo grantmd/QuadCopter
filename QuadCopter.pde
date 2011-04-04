@@ -73,11 +73,6 @@ void setup(){
   #endif
   
   //
-  // TODO: Calculate initial level and heading
-  // Like, are we on an angled surface and need to compensate for that at liftoff?
-  //
-  
-  //
   // It's go time
   //
   
@@ -95,6 +90,7 @@ void loop(){
   //
   // Get the latest data
   //
+  
   #ifdef SENSORS_ENABLED
   gyro.updateAll();
   accel.updateAll();
@@ -102,8 +98,10 @@ void loop(){
   #endif
 
   //
-  // TODO: Decide what to do and do it (flight control)
+  // Decide what to do and do it (flight control)
   //
+  
+  processFlightControl();
   
   //
   // TODO: Take commands from.... where? (flight command)
@@ -112,6 +110,7 @@ void loop(){
   //
   // Read serial commands and set them/reply
   //
+  
   #ifdef SERIALCONTROL_ENABLED
   if (currentTime > serialTime){
     serialTime = currentTime + SERIAL_RATE;

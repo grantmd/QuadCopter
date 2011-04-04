@@ -23,10 +23,10 @@
 
 Engines::Engines(){  
   // Setup engines
-  engines[0] = LEFT_FRONT_MOTOR_PIN;
-  engines[1] = RIGHT_FRONT_MOTOR_PIN;
-  engines[2] = LEFT_REAR_MOTOR_PIN;
-  engines[3] = RIGHT_REAR_MOTOR_PIN;
+  engines[LEFT_FRONT_MOTOR] = LEFT_FRONT_MOTOR_PIN;
+  engines[RIGHT_FRONT_MOTOR] = RIGHT_FRONT_MOTOR_PIN;
+  engines[LEFT_REAR_MOTOR] = LEFT_REAR_MOTOR_PIN;
+  engines[RIGHT_REAR_MOTOR] = RIGHT_REAR_MOTOR_PIN;
 }
 
 void Engines::init(){
@@ -58,13 +58,9 @@ void Engines::setAllSpeed(int speed){
   }
 }
 
-// Increase/decrease throttle
+// Increase/decrease throttle. Flight Control takes care of applying this to the engines
 void Engines::setThrottle(int new_throttle){
   throttle = new_throttle;
-  
-  for (byte engine = 0; engine < ENGINE_COUNT; engine++){
-    setEngineSpeed(engine, MIN_MOTOR_SPEED+throttle);
-  }
 }
 
 int Engines::getThrottle(){
@@ -89,6 +85,7 @@ void Engines::disarm(){
   if (!_armed) return;
   
   setThrottle(0);
+  allStop();
   
   _armed = false;
 }

@@ -72,8 +72,7 @@ void Accel::calibrate(){
 void Accel::autoZero(){
   // Take 50 measurements of all 3 axis, find the median, that's our zero-point
   // Why 50? Because that's what the aeroquad project does
-  // (note, I could not get to 50 -- my arduino locks up. so I'm leaving it at 10)
-  byte loopCount = 10;
+  byte loopCount = 50;
   
   //Serial.print("Starting accel autoZero with ");
   //Serial.print(loopCount, DEC);
