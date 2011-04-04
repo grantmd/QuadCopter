@@ -60,11 +60,10 @@ void Engines::setAllSpeed(int speed){
 
 // Increase/decrease throttle
 void Engines::setThrottle(int new_throttle){
-  int delta = new_throttle - throttle;
   throttle = new_throttle;
   
   for (byte engine = 0; engine < ENGINE_COUNT; engine++){
-    setEngineSpeed(engine, getEngineSpeed(engine)+delta);
+    setEngineSpeed(engine, MIN_MOTOR_SPEED+throttle);
   }
 }
 
