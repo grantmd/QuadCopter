@@ -104,8 +104,10 @@ void loop(){
   processFlightControl();
   
   //
-  // TODO: Take commands from.... where? (flight command)
+  // Take commands from.... where? (flight command)
   //
+  
+  processFlightCommand();
   
   //
   // Read serial commands and set them/reply
