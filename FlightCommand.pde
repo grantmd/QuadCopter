@@ -17,6 +17,50 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>. 
 */
 
+boolean isClimbing = false;
+boolean isDescending = false;
+
+unsigned long commandTime = 0;
+
 void processFlightCommand(){
+  return;
   
+  //
+  // Auto-arm after 30s
+  //
+  
+  if (!engines.isArmed() && currentTime >= 30000000){
+    engines.arm(0);
+    isClimbing = true;
+    
+    digitalWrite(green_led, HIGH);
+  }
+  else{
+    //
+    // Every 2s, go up/down 10 throttle units
+    //
+    
+    if (currentTime > commandTime){
+      commandTime = currentTime + 2000000;
+      
+      int throttle = engines.getThrottle();
+      
+      if (isClimbing){
+        engines.setThrottle(throttle+10);
+        
+        if (throttle >= 190){
+          isClimbing = false;
+          isDescending = true;
+        }
+      }
+      else if (isDescending){
+        engines.setThrottle(throttle-10);
+        
+        if (throttle <= 10){
+          isDescending = false;
+          engines.allStop();
+        }
+      } 
+    }
+  }
 }
