@@ -41,11 +41,10 @@ void processFlightControl(){
   float targetPitch = 0;
   
   //
-  // Don't adjust pitch/roll if we have no throttle (i.e. we're on the ground)
-  // And we must be armed!
+  // Don't adjust pitch/roll if we are not armed!
   //
   
-  if (engines.getThrottle() > 0 && engines.isArmed()){
+  if (engines.isArmed()){
     float G_Dt = deltaTime / 1000000.0;
     
     // Negative values mean the right side is up
@@ -58,10 +57,15 @@ void processFlightControl(){
     
     // Apply offsets to all motors evenly to ensure we pivot on the center
     int throttle = engines.getThrottle() + MIN_MOTOR_SPEED;
-    engines.setEngineSpeed(LEFT_FRONT_MOTOR, throttle - rollAdjust - pitchAdjust);
-    engines.setEngineSpeed(RIGHT_FRONT_MOTOR, throttle + rollAdjust - pitchAdjust);
-    engines.setEngineSpeed(LEFT_REAR_MOTOR, throttle - rollAdjust + pitchAdjust);
-    engines.setEngineSpeed(RIGHT_REAR_MOTOR, throttle + rollAdjust + pitchAdjust);
+    if (throttle > MIN_MOTOR_SPEED){
+      engines.setEngineSpeed(LEFT_FRONT_MOTOR, throttle - rollAdjust - pitchAdjust);
+      engines.setEngineSpeed(RIGHT_FRONT_MOTOR, throttle + rollAdjust - pitchAdjust);
+      engines.setEngineSpeed(LEFT_REAR_MOTOR, throttle - rollAdjust + pitchAdjust);
+      engines.setEngineSpeed(RIGHT_REAR_MOTOR, throttle + rollAdjust + pitchAdjust);
+    }
+    else{
+      engines.setAllSpeed(0);
+    }
     
     /*Serial.print(targetPitch);
     Serial.print(" | ");
