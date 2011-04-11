@@ -53,3 +53,7 @@
 #define VERSION 2.3 // Emulate Aeroquad
 
 #define SERIAL_RATE 100000 // How long between running the serial code?
+
+// Activity
+#define RED_LED 12 // Armed
+#define GREEN_LED 13 // Loop is running

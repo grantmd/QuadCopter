@@ -31,7 +31,7 @@ IMU::IMU(){
   }
   
   _tau = 0.95;
-  _dtGyro = 0.1; // 1hKz
+  _dtGyro = 0.05;
 }
 
 // Update the filter based on most recent values

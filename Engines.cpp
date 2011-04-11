@@ -78,6 +78,7 @@ void Engines::arm(byte method){
       setAllSpeed(MIN_MOTOR_SPEED);
   }
   
+  digitalWrite(RED_LED, HIGH);
   _armed = true;
 }
 
@@ -87,6 +88,7 @@ void Engines::disarm(){
   setThrottle(0);
   allStop();
   
+  digitalWrite(RED_LED, LOW);
   _armed = false;
 }
 

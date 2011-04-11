@@ -32,8 +32,6 @@ void processFlightCommand(){
   if (!engines.isArmed() && currentTime >= 30000000){
     engines.arm(0);
     isClimbing = true;
-    
-    digitalWrite(green_led, HIGH);
   }
   else{
     //

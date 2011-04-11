@@ -19,9 +19,9 @@
 
 #include "PID.h"
 
-PID levelRollPID = PID(4.0, 0.15, 0.0);
+PID levelRollPID = PID(1.0, 0.0, 0.0);
 //PID levelRollGyroPID = PID(100.0, 0.0, -300.0);
-PID levelPitchPID = PID(4.0, 0.15, 0.0);
+PID levelPitchPID = PID(1.0, 0.0, 0.0);
 //PID levelPitchGyroPID = PID(100.0, 0.0, -300.0);
 
 void processFlightControl(){

@@ -34,10 +34,6 @@ IMU imu;
 #include "Engines.h"
 Engines engines;
 
-// Activity
-byte red_led = 12; // System status
-byte green_led = 13; // Motor activity
-
 // Status
 byte system_mode = 0; // 0: Unknown, 1: Auto, 2: Manual, 3: Engine Test, 4: Sensor Test
 
@@ -54,10 +50,8 @@ void setup(){
   //
   // Activity LEDs
   //
-  pinMode(red_led, OUTPUT);
-  pinMode(green_led, OUTPUT);
-  
-  digitalWrite(red_led, HIGH); // Indicate system is not ready
+  pinMode(RED_LED, OUTPUT);
+  pinMode(GREEN_LED, OUTPUT);
   
   //
   // TODO: Load from eeprom
@@ -80,6 +74,8 @@ void setup(){
 }
 
 void loop(){
+  digitalWrite(GREEN_LED, HIGH);
+    
   //
   // Measure loop rate
   //
@@ -114,11 +110,13 @@ void loop(){
   //
   
   #ifdef SERIALCONTROL_ENABLED
-  if (currentTime > serialTime){
+  //if (currentTime > serialTime){
     serialTime = currentTime + SERIAL_RATE;
     
     readSerialCommand();
     sendSerialTelemetry();
-  }
+  //}
   #endif
+  
+  digitalWrite(GREEN_LED, LOW);
 } 
