@@ -30,11 +30,6 @@
 #define EEPROM_ADDR_ACCEL_ROLL 2 // int - 2 bytes
 #define EEPROM_ADDR_ACCEL_YAW 4 // int - 2 bytes
 
-#define EEPROM_ADDR_GYRO_PITCH 6 // int - 2 bytes
-#define EEPROM_ADDR_GYRO_ROLL 8 // int - 2 bytes
-#define EEPROM_ADDR_GYRO_YAW 10 // int - 2 bytes
-
-
 byte eeprom_read(int);
 float eeprom_read_float(int);
 int eeprom_read_int(int);

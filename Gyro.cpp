@@ -48,27 +48,12 @@ void Gyro::init(){
     //Serial.print(getTemp());
     //Serial.println("F");
     
-    // Load calibration data from eeprom
-    calibrate();
+    // Calculate current drift
+    autoZero();
   }
 }
 
-void Gyro::calibrate(){
-  // load from eeprom
-  zero[PITCH] = eeprom_read_int(EEPROM_ADDR_GYRO_PITCH);
-  zero[ROLL] = eeprom_read_int(EEPROM_ADDR_GYRO_ROLL);
-  zero[YAW] = eeprom_read_int(EEPROM_ADDR_GYRO_YAW);
-  
-  //Serial.print("Gyro zeros: ");
-  //Serial.print(zero[PITCH]);
-  //Serial.print(",");
-  //Serial.print(zero[ROLL]);
-  //Serial.print(",");
-  //Serial.println(zero[YAW]);
-}
-
-// Calculate zero for all 3 axis, storing it for later measurements
-// This assumes your platform is truly level!
+// Calculate zero for all 3 axis
 void Gyro::autoZero(){
   // Take 50 measurements of all 3 axis, find the median, that's our zero-point
   // Why 50? Because that's what the aeroquad project does
@@ -91,11 +76,6 @@ void Gyro::autoZero(){
     //Serial.print(" is: ");
     //Serial.println(zero[axis]);
   }
-  
-  // Write to eeprom
-  eeprom_write(EEPROM_ADDR_GYRO_PITCH, zero[PITCH]);
-  eeprom_write(EEPROM_ADDR_GYRO_ROLL, zero[ROLL]);
-  eeprom_write(EEPROM_ADDR_GYRO_YAW, zero[YAW]);
 }
 
 // Updates all raw measurements from the gyro (except temp)
