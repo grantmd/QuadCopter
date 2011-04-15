@@ -52,8 +52,17 @@
 
 #define VERSION 2.3 // Emulate Aeroquad
 
-#define SERIAL_RATE 100000 // How long between running the serial code?
+#define SERIAL_RATE 1000 // How long between running the serial code?
 
 // Activity
 #define RED_LED 12 // Armed
 #define GREEN_LED 13 // Loop is running
+
+// Measured raw accel values by putting the quadcopter on all 6 sides
+#define MAX_ACCEL_ROLL 269
+#define MAX_ACCEL_PITCH 268
+#define MAX_ACCEL_YAW 0
+  
+#define MIN_ACCEL_ROLL -271
+#define MIN_ACCEL_PITCH -260
+#define MIN_ACCEL_YAW 510

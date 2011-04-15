@@ -25,9 +25,17 @@
 #include "EEPROM.h"
 
 Accel::Accel() : I2C(){
-  _scaleFactor = G_2_MPS2(4.0 / 1024); // ±2 g is a range of 4, converted to Gs, and then converted to m/s2
   _smoothFactor = 1.0;
-  _oneG = 9.80665;
+
+  // From: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1231185714/30
+  gConstant[XAXIS] = 2.0 / float(MAX_ACCEL_ROLL - MIN_ACCEL_ROLL);
+  gB[XAXIS] = 1 - gConstant[XAXIS] * MAX_ACCEL_ROLL;
+  
+  gConstant[YAXIS] = 2.0 / float(MAX_ACCEL_PITCH - MIN_ACCEL_PITCH);
+  gB[YAXIS] = 1 - gConstant[YAXIS] * MAX_ACCEL_PITCH;
+  
+  gConstant[ZAXIS] = 2.0 / float(MAX_ACCEL_YAW - MIN_ACCEL_YAW);
+  gB[ZAXIS] = 1 - gConstant[ZAXIS] * MAX_ACCEL_YAW;
 }
 
 void Accel::init(){
@@ -61,14 +69,11 @@ void Accel::calibrate(){
   Serial.print(zero[ROLL]);
   Serial.print(",");
   Serial.println(zero[YAW]);*/
-  
-  // We need to recalc what 1G feels like
-  updateAll();
-  _oneG = zero[ZAXIS];
 }
 
 // Calculate zero for all 3 axis, storing it for later measurements
 // This assumes your platform is truly level!
+// See also: http://www.freescale.com/files/sensors/doc/app_note/AN3447.pdf
 void Accel::autoZero(){
   // Take 50 measurements of all 3 axis, find the median, that's our zero-point
   // Why 50? Because that's what the aeroquad project does
@@ -96,19 +101,16 @@ void Accel::autoZero(){
   eeprom_write(EEPROM_ADDR_ACCEL_PITCH, zero[XAXIS]);
   eeprom_write(EEPROM_ADDR_ACCEL_ROLL, zero[YAXIS]);
   eeprom_write(EEPROM_ADDR_ACCEL_YAW, zero[ZAXIS]);
-  
-  _oneG = zero[ZAXIS];
 }
 
 // Updates all raw measurements from the accelerometer
 void Accel::updateAll(){
-  //Serial.println("Updating all accel data");
   sendReadRequest(0x32);
   requestBytes(6);
 
   for (byte axis = XAXIS; axis <= ZAXIS; axis++) {
      dataRaw[axis] = zero[axis] - readNextWordFlip();
-     dataSmoothed[axis] = filterSmooth((float)dataRaw[axis] * _scaleFactor, dataSmoothed[axis], _smoothFactor);
+     dataSmoothed[axis] = filterSmooth(gConstant[axis] * dataRaw[axis] + gB[axis], dataSmoothed[axis], _smoothFactor);
   }
   
   _lastMeasureTime = micros();
@@ -121,24 +123,24 @@ void Accel::updateAll(){
 // But the pitch/roll/yaw terms make no sense to me here. They are left below, for aeroquad compatability, but I have added these
 // angle functions to calculate how much that axis is off center.
 //
+// See also: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1231185714/30 and http://www.freescale.com/files/sensors/doc/app_note/AN3461.pdf
+//
 // Return values are in degrees, from -180 to 180.
 //
 
+// Pitch!
 float Accel::getXAngle(){
-  return toDegrees(dataSmoothed[XAXIS]);
+  return atan2(dataSmoothed[XAXIS], sqrt( sq(dataSmoothed[YAXIS]) + sq(dataSmoothed[ZAXIS]) ) ) * 57.296;
 }
 
+// Roll!
 float Accel::getYAngle(){
-  return toDegrees(dataSmoothed[YAXIS]);
+  return atan2( dataSmoothed[YAXIS], sqrt( sq(dataSmoothed[XAXIS]) + sq(dataSmoothed[ZAXIS]) ) ) * 57.296;
 }
 
+// Yaw/Theta!
 float Accel::getZAngle(){
-  return toDegrees(dataSmoothed[ZAXIS]);
-}
-
-// Map -9.8m/s2 to -90 degrees, and +9.8ms/2 to +90 degrees
-float Accel::toDegrees(float value){
-  return (value + 9.80665) * 180 / 19.6133 - 90;
+  return atan2( sqrt( sq(dataSmoothed[XAXIS]) + sq(dataSmoothed[YAXIS]) ), dataSmoothed[ZAXIS] ) * 57.296;
 }
 
 ///////////
@@ -181,8 +183,4 @@ int Accel::getRawYaw(){
 
 float Accel::getSmoothFactor(){
   return _smoothFactor;
-}
-
-float Accel::getOneG(){
-  return _oneG;
 }

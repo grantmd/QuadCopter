@@ -48,7 +48,6 @@ class Accel : public I2C
     int getRawYaw();
     
     float getSmoothFactor();
-    float getOneG();
     
   private:
     I2C _i2c;
@@ -57,12 +56,12 @@ class Accel : public I2C
     float dataSmoothed[3]; // Smoothed accel data
     int zero[3]; // Zero points for the accel axes
     
-    float _scaleFactor; // How to convert raw sensor data to SI units
+    float gConstant[3];
+    float gB[3];
+    
     float _smoothFactor; // 1.0 to not smooth, otherwise adjust as necessary
 
     long int _lastMeasureTime;
-    
-    float _oneG;
     
     float toDegrees(float);
 };

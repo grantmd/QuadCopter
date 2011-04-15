@@ -30,14 +30,14 @@ IMU::IMU(){
     data[axis] = 0.0;
   }
   
-  _tau = 0.95;
-  _dtGyro = 0.05;
+  _tau = 0.98;
+  _dtGyro = 0.1;
 }
 
 // Update the filter based on most recent values
 void IMU::update(int dT, float gx, float gy, float gz, float ax, float ay, float az){
-  updateAxis(ROLL, dT, gx, ay);
-  updateAxis(PITCH, dT, gy, ax);
+  updateAxis(ROLL, dT, gx, ax);
+  updateAxis(PITCH, dT, gy, ay);
   //updateAxis(YAW, dT, gz, az);
 }
 

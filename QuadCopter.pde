@@ -90,7 +90,7 @@ void loop(){
   #ifdef SENSORS_ENABLED
   gyro.updateAll();
   accel.updateAll();
-  imu.update(deltaTime/1000, gyro.getRoll(), gyro.getPitch(), gyro.getYaw(), accel.getXAngle(), accel.getYAngle(), accel.getZAngle());
+  imu.update(deltaTime/1000, gyro.getRoll(), gyro.getPitch(), gyro.getYaw(), accel.getYAngle(), accel.getXAngle(), accel.getZAngle());
   #endif
 
   //
@@ -110,12 +110,12 @@ void loop(){
   //
   
   #ifdef SERIALCONTROL_ENABLED
-  //if (currentTime > serialTime){
+  if (currentTime > serialTime){
     serialTime = currentTime + SERIAL_RATE;
     
     readSerialCommand();
     sendSerialTelemetry();
-  //}
+  }
   #endif
   
   digitalWrite(GREEN_LED, LOW);

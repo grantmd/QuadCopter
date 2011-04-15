@@ -19,10 +19,9 @@
 
 #include "PID.h"
 
-PID levelRollPID = PID(1.0, 0.0, 0.0);
-//PID levelRollGyroPID = PID(100.0, 0.0, -300.0);
-PID levelPitchPID = PID(1.0, 0.0, 0.0);
-//PID levelPitchGyroPID = PID(100.0, 0.0, -300.0);
+// For tuning, see: http://en.wikipedia.org/wiki/PID_controller#Manual_tuning
+PID levelRollPID = PID(0.75, 0.15, 0.0);
+PID levelPitchPID = PID(0.75, 0.15, 0.0);
 
 void processFlightControl(){
   //
@@ -32,9 +31,6 @@ void processFlightControl(){
   #ifdef SENSORS_ENABLED
   float currentRoll = imu.getRoll();
   float currentPitch = imu.getPitch();
-  
-  //float rollRate = gyro.getRoll();
-  //float pitchRate = gyro.getPitch();
   
   // Level flight assumed
   float targetRoll = 0;
@@ -49,11 +45,9 @@ void processFlightControl(){
     
     // Negative values mean the right side is up
     float rollAdjust = levelRollPID.updatePID(targetRoll, currentRoll, G_Dt);
-    //float rollGyroAdjust = levelRollGyroPID.updatePID(targetRoll, rollRate, G_Dt);
     
     // Positive values mean the frontend is up
     float pitchAdjust = levelPitchPID.updatePID(targetPitch, currentPitch, G_Dt);
-    //float pitchGyroAdjust = levelPitchGyroPID.updatePID(targetRoll, pitchRate, G_Dt);
     
     // Apply offsets to all motors evenly to ensure we pivot on the center
     int throttle = engines.getThrottle() + MIN_MOTOR_SPEED;
