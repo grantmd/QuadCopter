@@ -30,11 +30,12 @@ IMU::IMU(){
     data[axis] = 0.0;
   }
   
-  _tau = 0.98;
-  _dtGyro = 0.1;
+  _tau = 0.95;
+  _dtGyro = 0.1; // 1kHz (in millis)
 }
 
 // Update the filter based on most recent values
+// dT is in milliseconds
 void IMU::update(int dT, float gx, float gy, float gz, float ax, float ay, float az){
   updateAxis(ROLL, dT, gx, ax);
   updateAxis(PITCH, dT, gy, ay);
@@ -60,6 +61,7 @@ float IMU::getHeading(){
 }
 
 // Update an axis using the complementary filter
+// dT is in millis
 void IMU::updateAxis(byte axis, int dT, float gyro, float accel){
   float a = _tau / (_tau + _dtGyro);
   float b = 1 - a;
