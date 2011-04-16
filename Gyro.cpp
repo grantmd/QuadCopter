@@ -42,8 +42,8 @@ void Gyro::init(){
   }
   else{
     writeSetting(0x3E, 0x80); // Reset it
-    delay(50); // Give it some time to startup
-    writeSetting(0x16, 0x1D); // 10Hz low pass filter
+    delay(50); // Give it some time to startup (20ms from the datasheet, plus wiggle room!)
+    writeSetting(0x16, 0x1D); // 10Hz low pass filter/1kHz internal sample rate
     writeSetting(0x3E, 0x01); // use X gyro oscillator
     
     //Serial.print("Current temp: ");
