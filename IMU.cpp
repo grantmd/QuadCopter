@@ -41,7 +41,7 @@ void IMU::update(int dT, float gx, float gy, float gz, float ax, float ay, float
   updateAxis(PITCH, dT, gy, ay);
   
   // YAW/Heading is based on gyro only
-  data[YAW] = data[YAW] + (gz * dT / _dtGyro);
+  data[YAW] = data[YAW] + (gz * dT * _dtGyro);
 }
 
 // Get filtered roll angle
