@@ -43,7 +43,7 @@ void Accel::init(){
   setAddress(ACCEL_ADDR);
   
   if (!getAddressFromDevice()){
-    Serial.println("ACCEL NOT CONNECTED!");
+    //Serial.println("ACCEL NOT CONNECTED!");
   }
   else{
     writeSetting(0x2D, 0x00); // Shut down

@@ -39,7 +39,9 @@ IMU::IMU(){
 void IMU::update(int dT, float gx, float gy, float gz, float ax, float ay, float az){
   updateAxis(ROLL, dT, gx, ax);
   updateAxis(PITCH, dT, gy, ay);
-  //updateAxis(YAW, dT, gz, az);
+  
+  // YAW/Heading is based on gyro only
+  data[YAW] = data[YAW] + (gz * dT / _dtGyro);
 }
 
 // Get filtered roll angle
@@ -54,10 +56,9 @@ float IMU::getPitch(){
   return data[PITCH];
 }
 
-// This doesn't work!
+// Angle from our starting heading, using gyro data only (suscrptible to gyro drift)
 float IMU::getHeading(){
-  return 0;
-  //return data[YAW];
+  return data[YAW];
 }
 
 // Update an axis using the complementary filter

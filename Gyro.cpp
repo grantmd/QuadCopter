@@ -36,7 +36,7 @@ void Gyro::init(){
   setAddress(GYRO_ADDR);
   
   if (!getAddressFromDevice()){
-    Serial.println("GYRO NOT CONNECTED!");
+    //Serial.println("GYRO NOT CONNECTED!");
   }
   else{
     writeSetting(0x3E, 0x80); // Reset it

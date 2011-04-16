@@ -22,6 +22,7 @@
 // For tuning, see: http://en.wikipedia.org/wiki/PID_controller#Manual_tuning
 PID levelRollPID = PID(0.75, 0.15, 0.0);
 PID levelPitchPID = PID(0.75, 0.15, 0.0);
+PID headingHoldPID = PID(0.75, 0.15, 0.0);
 
 void processFlightControl(){
   //
@@ -31,10 +32,12 @@ void processFlightControl(){
   #ifdef SENSORS_ENABLED
   float currentRoll = imu.getRoll();
   float currentPitch = imu.getPitch();
+  float currentHeading = imu.getHeading();
   
   // Level flight assumed
   float targetRoll = 0;
   float targetPitch = 0;
+  float targetHeading = 0;
   
   //
   // Don't adjust pitch/roll if we are not armed!
@@ -48,6 +51,8 @@ void processFlightControl(){
     
     // Positive values mean the frontend is up
     float pitchAdjust = levelPitchPID.updatePID(targetPitch, currentPitch, G_Dt);
+    
+    float headingAdjust = levelPitchPID.updatePID(targetHeading, currentHeading, G_Dt);
     
     // Apply offsets to all motors evenly to ensure we pivot on the center
     int throttle = engines.getThrottle() + MIN_MOTOR_SPEED;
