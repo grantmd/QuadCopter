@@ -3,6 +3,8 @@
   Created by Myles Grant <myles@mylesgrant.com>
   See also: https://github.com/grantmd/QuadCopter
   
+  Datasheet: http://www.sparkfun.com/datasheets/Sensors/Accelerometer/ADXL345.pdf
+  
   This program is free software: you can redistribute it and/or modify 
   it under the terms of the GNU General Public License as published by 
   the Free Software Foundation, either version 3 of the License, or 
