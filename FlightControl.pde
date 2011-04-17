@@ -20,9 +20,9 @@
 #include "PID.h"
 
 // For tuning, see: http://en.wikipedia.org/wiki/PID_controller#Manual_tuning
-PID levelRollPID = PID(0.75, 0.15, 0.0);
-PID levelPitchPID = PID(0.75, 0.15, 0.0);
-PID headingHoldPID = PID(0.75, 0.15, 0.0);
+PID levelRollPID = PID(1.3, 0.25, 0.0);
+PID levelPitchPID = PID(1.3, 0.25, 0.0);
+PID headingHoldPID = PID(1.3, 0.25, 0.0);
 
 void processFlightControl(){
   //
@@ -52,6 +52,7 @@ void processFlightControl(){
     // Positive values mean the frontend is up
     float pitchAdjust = levelPitchPID.updatePID(targetPitch, currentPitch, G_Dt);
     
+    // Positive values are to the right
     float headingAdjust = levelPitchPID.updatePID(targetHeading, currentHeading, G_Dt);
     
     // Apply offsets to all motors evenly to ensure we pivot on the center
