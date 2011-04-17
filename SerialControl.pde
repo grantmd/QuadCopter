@@ -309,6 +309,14 @@ void sendSerialTelemetry(){
       serialPrintValueComma(imu.getPitch());
       serialPrintValueComma(imu.getHeading());
       
+      serialPrintValueComma(accel.getXAngle());
+      serialPrintValueComma(accel.getYAngle());
+      serialPrintValueComma(accel.getZAngle());
+      
+      serialPrintValueComma(gyro.getRoll());
+      serialPrintValueComma(gyro.getPitch());
+      serialPrintValueComma(gyro.getYaw());
+      
       serialPrintValueComma(engines.getThrottle());
       
       for (byte engine = 0; engine < ENGINE_COUNT; engine++){
