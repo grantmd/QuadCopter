@@ -12,3 +12,8 @@ Parts
 * 4 E-flite Park 400 motors
 * 4 E-flite 20-amp ESCs
 * Tons of patience
+
+Software Model
+--------------
+
+https://docs.google.com/drawings/edit?id=16oIVzLJfiHQFph_YqQho9tQ16BCHU11p3ffUwpTAt9U&hl=en&authkey=CO-kjOkC
