@@ -35,7 +35,7 @@ IMU::IMU(){
   }
   
   _a = 0.975;
-  _b = 1 - a;
+  _b = 1 - _a;
   _dtGyro = 0.1; // Update rate of gyros: 1kHz (in millis)
 }
 

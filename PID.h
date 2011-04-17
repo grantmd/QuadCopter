@@ -23,7 +23,7 @@
 #include "WProgram.h"
 #include "Definitions.h"
 
-#define WINDUP_GUARD_GAIN 1000.0
+#define WINDUP_GUARD_GAIN 500.0
 
 class PID
 {

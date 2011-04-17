@@ -106,7 +106,7 @@ float PID::updatePID(float target, float cur, float deltaTime){
   // the dTerm, the difference between the temperature now
   //  and our last reading, indicated the "speed," 
   // how quickly the temp is changing. (aka. Differential)
-  dTerm = (dgain * (cur - last)) / (deltaTime / 100);
+  dTerm = (dgain * (cur - last)) / deltaTime;
 
   // now that we've use lastTemp, put the current temp in
   // our pocket until for the next round

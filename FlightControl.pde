@@ -20,9 +20,9 @@
 #include "PID.h"
 
 // For tuning, see: http://en.wikipedia.org/wiki/PID_controller#Manual_tuning
-PID levelRollPID = PID(1.3, 0.25, 0.0);
-PID levelPitchPID = PID(1.3, 0.25, 0.0);
-PID headingHoldPID = PID(1.3, 0.25, 0.0);
+PID levelRollPID = PID(2.0, 0.25, 0.25);
+PID levelPitchPID = PID(2.0, 0.25, 0.25);
+PID headingHoldPID = PID(2.0, 0.25, 0.25);
 
 
 float currentRoll = 0.0;
@@ -49,16 +49,18 @@ void processFlightControl(){
   //
   
   if (engines.isArmed()){
-    float G_Dt = deltaTime / 1000000.0;
+    float G_Dt = deltaTime / 1000000.0; // Delta time in seconds
     
     // Negative values mean the right side is up
-    float rollAdjust = levelRollPID.updatePID(targetRoll, currentRoll, G_Dt);
+    // Constrain to 45 degrees, because beyond that, we're fucked anyway
+    float rollAdjust = levelRollPID.updatePID(targetRoll, constrain(currentRoll, -45, 45), G_Dt);
     
     // Positive values mean the frontend is up
-    float pitchAdjust = levelPitchPID.updatePID(targetPitch, currentPitch, G_Dt);
+    // Constrain to 45 degrees, because beyond that, we're fucked anyway
+    float pitchAdjust = levelPitchPID.updatePID(targetPitch, constrain(currentPitch, -45, 45), G_Dt);
     
     // Positive values are to the right
-    float headingAdjust = levelPitchPID.updatePID(targetHeading, currentHeading, G_Dt);
+    float headingAdjust = headingHoldPID.updatePID(targetHeading, currentHeading, G_Dt);
     
     // Apply offsets to all motors evenly to ensure we pivot on the center
     int throttle = engines.getThrottle() + MIN_MOTOR_SPEED;
@@ -78,6 +80,12 @@ void processFlightControl(){
     Serial.print(" | ");
     Serial.println(pitchAdjust);*/
     //delay(100);
+  }
+  else{
+    // Reset state
+    levelRollPID.resetError();
+    levelPitchPID.resetError();
+    headingHoldPID.resetError();
   }
   
   #endif
