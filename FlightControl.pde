@@ -39,7 +39,6 @@ void processFlightControl(){
   // Can't really do anything without sensors/imu
   //
   
-  #ifdef SENSORS_ENABLED
   currentRoll = imu.getRoll();
   currentPitch = imu.getPitch();
   currentHeading = imu.getHeading();
@@ -87,6 +86,4 @@ void processFlightControl(){
     levelPitchPID.resetError();
     headingHoldPID.resetError();
   }
-  
-  #endif
 }

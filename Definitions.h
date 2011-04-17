@@ -19,10 +19,6 @@
   along with this program. If not, see <http://www.gnu.org/licenses/>. 
 */
 
-// Config flags
-#define SENSORS_ENABLED
-#define SERIALCONTROL_ENABLED
-
 // Global definitions
 #define ENGINE_COUNT 4
 // Speeds are in microseconds, not degrees, for greater control

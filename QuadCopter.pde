@@ -22,14 +22,13 @@
 #include "Definitions.h"
 #include "EEPROM.h"
 
-#ifdef SENSORS_ENABLED
 #include "Gyro.h"
 #include "Accel.h"
 #include "IMU.h"
+
 Gyro gyro;
 Accel accel;
 IMU imu;
-#endif
 
 #include "Engines.h"
 Engines engines;
@@ -61,10 +60,8 @@ void setup(){
   // Run inits
   //
   engines.init();
-  #ifdef SENSORS_ENABLED
   gyro.init();
   accel.init();
-  #endif
   
   //
   // It's go time
@@ -87,11 +84,9 @@ void loop(){
   // Get the latest data
   //
   
-  #ifdef SENSORS_ENABLED
   gyro.updateAll();
   accel.updateAll();
   imu.update(deltaTime/1000, gyro.getRoll(), gyro.getPitch(), gyro.getYaw(), accel.getYAngle(), accel.getXAngle(), accel.getZAngle());
-  #endif
 
   //
   // Decide what to do and do it (flight control)
@@ -109,14 +104,12 @@ void loop(){
   // Read serial commands and set them/reply
   //
   
-  #ifdef SERIALCONTROL_ENABLED
   if (currentTime > serialTime){
     serialTime = currentTime + SERIAL_RATE;
     
     readSerialCommand();
     sendSerialTelemetry();
   }
-  #endif
   
   digitalWrite(GREEN_LED, LOW);
 } 
