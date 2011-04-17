@@ -24,20 +24,25 @@ PID levelRollPID = PID(1.3, 0.25, 0.0);
 PID levelPitchPID = PID(1.3, 0.25, 0.0);
 PID headingHoldPID = PID(1.3, 0.25, 0.0);
 
+
+float currentRoll = 0.0;
+float currentPitch = 0.0;
+float currentHeading = 0.0;
+
+// Level flight assumed
+float targetRoll = 0.0;
+float targetPitch = 0.0;
+float targetHeading = 0.0;
+
 void processFlightControl(){
   //
   // Can't really do anything without sensors/imu
   //
   
   #ifdef SENSORS_ENABLED
-  float currentRoll = imu.getRoll();
-  float currentPitch = imu.getPitch();
-  float currentHeading = imu.getHeading();
-  
-  // Level flight assumed
-  float targetRoll = 0;
-  float targetPitch = 0;
-  float targetHeading = 0;
+  currentRoll = imu.getRoll();
+  currentPitch = imu.getPitch();
+  currentHeading = imu.getHeading();
   
   //
   // Don't adjust pitch/roll if we are not armed!
