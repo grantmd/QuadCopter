@@ -38,7 +38,9 @@ class IMU
   
     float data[3];
     
-    float _tau; // How much bias to accel vs gyro?
+    float _a; // How much bias to accel vs gyro?
+    float _b;
+    
     float _dtGyro; // Update rate of the gyro
 };
 

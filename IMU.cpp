@@ -21,6 +21,10 @@
 // This is a Complementary Filter!
 // http://web.mit.edu/scolton/www/filter.pdf
 //
+// Maybe in the future it should be a Kalman filter:
+// http://tom.pycke.be/mav/71/kalman-filtering-of-imu-data
+// http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1248889032/35
+//
 
 #include "WProgram.h"
 #include "IMU.h"
@@ -30,12 +34,15 @@ IMU::IMU(){
     data[axis] = 0.0;
   }
   
-  _tau = 0.95;
-  _dtGyro = 0.1; // 1kHz (in millis)
+  _a = 0.975;
+  _b = 1 - a;
+  _dtGyro = 0.1; // Update rate of gyros: 1kHz (in millis)
 }
 
 // Update the filter based on most recent values
 // dT is in milliseconds
+// g* is gyro rotation rate in degrees/s
+// a* is current angle in degrees
 void IMU::update(int dT, float gx, float gy, float gz, float ax, float ay, float az){
   updateAxis(ROLL, dT, gx, ax);
   updateAxis(PITCH, dT, gy, ay);
@@ -63,8 +70,8 @@ float IMU::getHeading(){
 
 // Update an axis using the complementary filter
 // dT is in millis
+// gyro is gyro rotation rate in degrees/s
+// accel is current angle in degrees
 void IMU::updateAxis(byte axis, int dT, float gyro, float accel){
-  float a = _tau / (_tau + _dtGyro);
-  float b = 1 - a;
-  data[axis] = (a * (data[axis] + (gyro * dT))) + (b * accel);
+  data[axis] = (_a * (data[axis] + (gyro * dT * _dtGyro))) + (_b * accel);
 }
