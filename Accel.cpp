@@ -27,7 +27,7 @@
 #include "EEPROM.h"
 
 Accel::Accel() : I2C(){
-  _smoothFactor = 1.0;
+  _smoothFactor = 0.7;
 
   // From: http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1231185714/30
   gConstant[XAXIS] = 2.0 / float(MAX_ACCEL_ROLL - MIN_ACCEL_ROLL);
