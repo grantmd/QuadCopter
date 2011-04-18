@@ -20,9 +20,9 @@
 #include "PID.h"
 
 // For tuning, see: http://en.wikipedia.org/wiki/PID_controller#Manual_tuning
-PID levelRollPID = PID(2.0, 0.25, 0.25);
-PID levelPitchPID = PID(2.0, 0.25, 0.25);
-PID headingHoldPID = PID(2.0, 0.25, 0.25);
+PID levelRollPID = PID(1.0, 0.1, 0.1);
+PID levelPitchPID = PID(1.0, 0.1, 0.1);
+PID headingHoldPID = PID(1.0, 0.1, 0.1);
 
 
 float currentRoll = 0.0;
@@ -35,9 +35,6 @@ float targetPitch = 0.0;
 float targetHeading = 0.0;
 
 void processFlightControl(){
-  //
-  // Can't really do anything without sensors/imu
-  //
   
   currentRoll = imu.getRoll();
   currentPitch = imu.getPitch();
