@@ -20,9 +20,9 @@
 #include "PID.h"
 
 // For tuning, see: http://en.wikipedia.org/wiki/PID_controller#Manual_tuning
-PID levelRollPID = PID(1.0, 0.1, 0.1);
-PID levelPitchPID = PID(1.0, 0.1, 0.1);
-PID headingHoldPID = PID(1.0, 0.1, 0.1);
+PID levelRollPID = PID(1.1, 0.2, 0.8);
+PID levelPitchPID = PID(1.1, 0.2, 0.8);
+PID headingHoldPID = PID(1.1, 0.2, 0.8);
 
 
 float currentRoll = 0.0;
