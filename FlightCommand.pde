@@ -23,32 +23,44 @@ boolean isDescending = false;
 unsigned long commandTime = 0;
 
 void processFlightCommand(){
-  return;
   
   //
-  // Auto-arm after 30s
+  // Panic!
   //
   
-  if (!engines.isArmed() && currentTime >= 30000000){
+  if (imu.getRoll() > 90 || imu.getRoll() < -90 || imu.getPitch() > 90 || imu.getPitch() < -90){
+    engines.disarm();
+  }
+  
+  //
+  // Auto-arm after 10s
+  //
+  
+  if (!engines.isArmed() && currentTime >= 10000000){
     engines.arm(0);
     isClimbing = true;
+    
+    // Start in 5s
+    commandTime = currentTime + 5000000;
   }
   else{
     //
-    // Every 2s, go up/down 10 throttle units
+    // Every 1s, go up/down 10 throttle units
     //
     
     if (currentTime > commandTime){
-      commandTime = currentTime + 2000000;
+      commandTime = currentTime + 1000000;
       
       int throttle = engines.getThrottle();
       
       if (isClimbing){
         engines.setThrottle(throttle+10);
         
-        if (throttle >= 190){
+        if (throttle >= 420){
           isClimbing = false;
           isDescending = true;
+          
+          commandTime = currentTime + 5000000;
         }
       }
       else if (isDescending){
