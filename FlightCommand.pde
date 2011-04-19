@@ -45,11 +45,11 @@ void processFlightCommand(){
   }
   else{
     //
-    // Every 1s, go up/down 10 throttle units
+    // Every 0.8s, go up/down 10 throttle units
     //
     
     if (currentTime > commandTime){
-      commandTime = currentTime + 1000000;
+      commandTime = currentTime + 80000;
       
       int throttle = engines.getThrottle();
       
@@ -60,7 +60,7 @@ void processFlightCommand(){
           isClimbing = false;
           isDescending = true;
           
-          commandTime = currentTime + 5000000;
+          commandTime = currentTime + 20000000;
         }
       }
       else if (isDescending){
