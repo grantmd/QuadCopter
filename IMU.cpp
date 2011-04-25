@@ -65,7 +65,7 @@ float IMU::getPitch(){
   return data[PITCH];
 }
 
-// Angle from our starting heading, using gyro data only (suscrptible to gyro drift)
+// Angle from our starting heading, using gyro data only (susceptible to gyro drift)
 float IMU::getHeading(){
   return data[YAW];
 }
