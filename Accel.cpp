@@ -114,8 +114,6 @@ void Accel::updateAll(){
      dataRaw[axis] = zero[axis] - readNextWordFlip();
      dataSmoothed[axis] = filterSmooth(gConstant[axis] * dataRaw[axis] + gB[axis], dataSmoothed[axis], _smoothFactor);
   }
-  
-  _lastMeasureTime = micros();
 }
 
 ///////////

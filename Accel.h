@@ -62,8 +62,6 @@ class Accel : public I2C
     float gB[3];
     
     float _smoothFactor; // 1.0 to not smooth, otherwise adjust as necessary
-
-    long int _lastMeasureTime;
     
     float toDegrees(float);
 };
