@@ -108,9 +108,9 @@ int Gyro::getTemp(){
 // Rate of rotation on a horizontal line drawn between the left and right engines
 // rotational rate about the Y (pitch)
 // i.e. How fast are we currently rotating forwards or backwards?
-// Negative numbers are forward, positive is backward
+// Negative numbers are backward, positive is forward
 float Gyro::getPitch(){
-  return dataSmoothed[PITCH];
+  return dataSmoothed[PITCH] * -1;
 }
 
 // Rate of rotation on a horizontal line drawn between the front and rear engines
