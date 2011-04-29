@@ -22,15 +22,17 @@ boolean isDescending = false;
 
 unsigned long commandTime = 0;
 
-void processFlightCommand(){
+void processFlightCommand(){   
+  
+  // If we are in manual mode, quit
+  if (systemMode == 0) return;
   
   //
-  // Panic!
-  //
+  // Temp throttle sanity check
+  // 
   
-  if (imu.getRoll() > 90 || imu.getRoll() < -90 || imu.getPitch() > 90 || imu.getPitch() < -90){
-    engines.disarm();
-  }
+  int throttle = engines.getThrottle();
+  if (throttle > 480) engines.setThrottle(480);
   
   //
   // Auto-arm after 10s
@@ -51,16 +53,17 @@ void processFlightCommand(){
     if (currentTime > commandTime){
       commandTime = currentTime + 80000;
       
-      int throttle = engines.getThrottle();
-      
       if (isClimbing){
         engines.setThrottle(throttle+10);
         
-        if (throttle >= 420){
+        if (throttle >= 480){
           isClimbing = false;
-          isDescending = true;
           
-          commandTime = currentTime + 20000000;
+          // If in Auto mode, begin descending in 20s
+          if (systemMode == 1){
+            commandTime = currentTime + 20000000;
+            isDescending = true;
+          }
         }
       }
       else if (isDescending){
