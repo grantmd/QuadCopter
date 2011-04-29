@@ -30,11 +30,25 @@ void readSerialCommand(){
     _queryType = Serial.read(); // Read the command first
 
     switch (_queryType){
-      case 'A': // Receive roll and pitch gyro PID
+      case 'A': // TODO: Receive roll and pitch gyro PID
+        //readSerialPID(ROLL);
+        //readSerialPID(PITCH);
+        //float minAcro = readFloatSerial();
         break;
-      case 'C': // Receive yaw PID
+      case 'C': // TODO: Receive yaw PID
+        /*readSerialPID(YAW);
+        readSerialPID(HEADING);
+        headingHoldConfig = readFloatSerial();
+        heading = 0;
+        relativeHeading = 0;
+        headingHold = 0;*/
         break;
-      case 'E': // Receive roll and pitch auto level PID
+      case 'E': // TODO: Receive roll and pitch auto level PID
+        readSerialPID(levelRollPID);
+        readSerialPID(levelPitchPID);
+        //readSerialPID(LEVELGYROROLL);
+        //readSerialPID(LEVELGYROPITCH);
+        //windupGuard = readFloatSerial(); // defaults found in setup() of AeroQuad.pde
         break;
       case 'G': // Receive auto level configuration
         break;
@@ -95,6 +109,10 @@ void readSerialCommand(){
       case '$': // Set throttle
         engines.setThrottle(readIntSerial());
         break;
+      case 'S': // Set system mode
+        systemMode = readIntSerial();
+        _queryType = 'X';
+        break;
     }
   }
 }
@@ -105,23 +123,23 @@ void sendSerialTelemetry(){
       //_queryType = 'X';
       break;
     case 'B': // Send roll and pitch gyro PID values
-      serialPrintPID(ROLL);
-      serialPrintPID(PITCH);
+      //serialPrintPID(ROLL);
+      //serialPrintPID(PITCH);
       Serial.println(1300); // TODO: Read from EEPROM
       _queryType = 'X';
       break;
     case 'D': // Send yaw PID values
-      serialPrintPID(YAW);
-      serialPrintPID(5); // TODO: Heading hold
+      //serialPrintPID(YAW);
+      serialPrintPID(headingHoldPID);
       Serial.println(0, BIN);
       _queryType = 'X';
       break;
     case 'F': // Send roll and pitch auto level PID values
-      serialPrintPID(3); // TODO: LEVELROLL
-      serialPrintPID(4); // TODO: LEVELPITCH
-      serialPrintPID(6); // TODO: LEVELGYROROLL
-      serialPrintPID(7); // TODO: LEVELGYROPITCH
-      Serial.println(1000.0); // TODO: windup guard
+      serialPrintPID(levelRollPID);
+      serialPrintPID(levelPitchPID);
+      //serialPrintPID(6); // TODO: LEVELGYROROLL
+      //serialPrintPID(7); // TODO: LEVELGYROPITCH
+      Serial.println(WINDUP_GUARD_GAIN); // TODO: windup guard
       _queryType = 'X';
       break;
     case 'H': // Send auto level configuration values
@@ -139,7 +157,7 @@ void sendSerialTelemetry(){
       _queryType = 'X';
       break;
     case 'L': // Send data filtering values
-      serialPrintValueComma(gyro.getSmoothFactor());
+      serialPrintValueComma(1.0);
       serialPrintValueComma(accel.getSmoothFactor());
       Serial.println(7.0); // TODO: Read this from EEPROM
       _queryType = 'X';
@@ -323,7 +341,8 @@ void sendSerialTelemetry(){
         serialPrintValueComma(engines.getEngineSpeed(engine));
       }
       
-      Serial.println(engines.isArmed(), BIN);
+      serialPrintValueComma(engines.isArmed());
+      Serial.println(systemMode, DEC);
       
       break;
   }
@@ -404,8 +423,14 @@ void serialComma(){
   Serial.print(',');
 }
 
-void serialPrintPID(unsigned char IDPid){
-  serialPrintValueComma(0.0); // TODO: Make real
-  serialPrintValueComma(0.0);
-  serialPrintValueComma(0.0);
+void serialPrintPID(PID pid){
+  serialPrintValueComma(pid.getP());
+  serialPrintValueComma(pid.getI());
+  serialPrintValueComma(pid.getD());
+}
+
+void readSerialPID(PID &pid) {
+  pid.setP(readFloatSerial());
+  pid.setI(readFloatSerial());
+  pid.setD(readFloatSerial());
 }

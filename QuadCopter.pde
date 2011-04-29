@@ -26,6 +26,8 @@
 #include "Accel.h"
 #include "IMU.h"
 
+#include "PID.h"
+
 Gyro gyro;
 Accel accel;
 IMU imu;
@@ -34,14 +36,14 @@ IMU imu;
 Engines engines;
 
 // Status
-byte system_mode = 0; // 0: Unknown, 1: Auto, 2: Manual, 3: Engine Test, 4: Sensor Test
+byte systemMode = 0; // 0: Manual, 1: Auto, 2: PID Test
 
 int pos = 0;
 unsigned long previousTime = 0;
 unsigned long currentTime = 0;
 unsigned long deltaTime = 0;
 unsigned long serialTime = 0;
- 
+
 void setup(){
   Serial.begin(115200);
   Wire.begin(); // For the gyro and accel
@@ -51,10 +53,6 @@ void setup(){
   //
   pinMode(RED_LED, OUTPUT);
   pinMode(GREEN_LED, OUTPUT);
-  
-  //
-  // TODO: Load from eeprom
-  //
   
   //
   // Run inits
@@ -112,4 +110,4 @@ void loop(){
   }
   
   digitalWrite(GREEN_LED, LOW);
-} 
+}
