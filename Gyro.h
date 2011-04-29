@@ -48,8 +48,6 @@ class Gyro : public I2C
     void sleep();
     void unsleep();
     
-    float getSmoothFactor();
-    
   private:
     I2C _i2c;
     
@@ -59,9 +57,7 @@ class Gyro : public I2C
     int zero[3]; // Zero points for the gyro axes
     
     float _scaleFactor; // How to convert raw sensor data to SI units
-    float _smoothFactor; // 1.0 to not smooth, otherwise adjust as necessary
-
-    long int _lastMeasureTime;
+    
     boolean _sleeping;
 };
 

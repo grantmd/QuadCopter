@@ -28,7 +28,6 @@
 
 Gyro::Gyro() : I2C(){
   _scaleFactor = radians(1.0 / 14.375); // ITG3200 14.375 LSBs per °/sec
-  _smoothFactor = 1.0;
   _sleeping = false;
 }
 
@@ -88,10 +87,12 @@ void Gyro::updateAll(){
 
   for (byte axis = ROLL; axis <= YAW; axis++){
      dataRaw[axis] = zero[axis] - readNextWord();
-     dataSmoothed[axis] = filterSmooth((float)dataRaw[axis] * _scaleFactor, dataSmoothed[axis], _smoothFactor);
+     
+     dataSmoothed[axis] = (float)dataRaw[axis] * _scaleFactor;
+     
+     // Ignore small gyro changes, since they are likely drift
+     if (dataSmoothed[axis] <= 0.5 && dataSmoothed[axis] >= -0.5) dataSmoothed[axis] = 0;
   }
-  
-  _lastMeasureTime = micros();
 }
 
 ///////////
@@ -109,6 +110,7 @@ int Gyro::getTemp(){
 // rotational rate about the Y (pitch)
 // i.e. How fast are we currently rotating forwards or backwards?
 // Negative numbers are backward, positive is forward
+// Inverted to match the sign of the accelerometer on this axis
 float Gyro::getPitch(){
   return dataSmoothed[PITCH] * -1;
 }
@@ -155,10 +157,4 @@ void Gyro::unsleep(){
   if (!_sleeping) return;
   writeSetting(0x3E, 0x00);
   _sleeping = false;
-}
-
-/////////////
-
-float Gyro::getSmoothFactor(){
-  return _smoothFactor;
 }

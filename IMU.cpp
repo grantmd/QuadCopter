@@ -48,8 +48,6 @@ void IMU::update(int dT, float gx, float gy, float gz, float ax, float ay, float
   updateAxis(PITCH, dT, gy, ay);
   
   // YAW/Heading is based on gyro only
-  // Ignore small gyro changes, since they are likely drift
-  if (gz <= 0.5 && gz >= -0.5) gz = 0;
   data[YAW] = data[YAW] + (gz * dT * _dtGyro);
 }
 
