@@ -25,12 +25,14 @@
 #include "Gyro.h"
 #include "Accel.h"
 #include "IMU.h"
+#include "INS.h"
 
 #include "PID.h"
 
 Gyro gyro;
 Accel accel;
 IMU imu;
+INS ins;
 
 #include "Engines.h"
 Engines engines;
@@ -85,6 +87,7 @@ void loop(){
   gyro.updateAll();
   accel.updateAll();
   imu.update(deltaTime/1000, gyro.getRoll(), gyro.getPitch(), gyro.getYaw(), accel.getYAngle(), accel.getXAngle(), accel.getZAngle());
+  ins.update(deltaTime/1000, accel.getRoll(), accel.getPitch(), accel.getYaw(), imu.getHeading());
 
   //
   // Decide what to do and do it (flight control)

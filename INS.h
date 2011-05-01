@@ -27,6 +27,20 @@ class INS
 {
   public:
     INS();
+    void init();
+    
+    void update(int, float, float, float, float);
+    
+    int getXPosition();
+    int getYPosition();
+    int getZPosition();
+    
+  private:
+    void updateAxis(byte, int, float);
+  
+    float _acceleration[3];
+    float _velocity[3];
+    int _position[3];
 };
 
 #endif
