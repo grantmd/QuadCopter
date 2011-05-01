@@ -37,10 +37,12 @@ class INS
     
   private:
     void updateAxis(byte, int, float);
+    void movementEndCheck(byte);
   
     float _acceleration[3];
     float _velocity[3];
     int _position[3];
+    int _zeroCount[3];
 };
 
 #endif

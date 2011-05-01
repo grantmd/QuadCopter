@@ -39,16 +39,34 @@ void INS::update(int dT, float x_accel, float y_accel, float z_accel, float head
   updateAxis(ZAXIS, dT, z_accel);
 }
 
+// Combine acceleration data with previous measurements to get our velocity and position
 void INS::updateAxis(byte axis, int dT, float accel){
   // first integration
   float velocity = _velocity[axis] + _acceleration[axis] + ((accel - _acceleration[axis]) / 2);
 
   // second integration
-  _position[axis] = _position[axis] + _velocity[axis] + ((velocity - _velocity[axis]) / 2);
+  int position = _position[axis] + _velocity[axis] + ((velocity - _velocity[axis]) / 2);
   
   // Store for next time
+  _position[axis] = position;
   _velocity[axis] = velocity;
   _acceleration[axis] = accel;
+  
+  movementEndCheck(axis);
+}
+
+// Maintain a count of how many ticks at 0 acceleration we've seen. If we've seen "enough", zero out velocity
+void INS::movementEndCheck(byte axis){
+  if (_acceleration[axis] == 0){
+    _zeroCount[axis]++;
+  }
+  else{
+    _zeroCount[axis] = 0;
+  }
+
+  if (_zeroCount[axis] >= 25){ 
+    _velocity[axis] = 0;
+  }
 }
 
 ///////////
