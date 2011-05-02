@@ -91,7 +91,7 @@ void Gyro::updateAll(){
      dataSmoothed[axis] = (float)dataRaw[axis] * _scaleFactor;
      
      // Ignore small gyro changes, since they are likely drift
-     if (dataSmoothed[axis] <= 0.5 && dataSmoothed[axis] >= -0.5) dataSmoothed[axis] = 0;
+     //if (dataSmoothed[axis] <= 0.5 && dataSmoothed[axis] >= -0.5) dataSmoothed[axis] = 0;
   }
 }
 
