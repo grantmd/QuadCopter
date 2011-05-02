@@ -26,19 +26,15 @@ void processFlightCommand(){
   
   // If we are in manual mode, quit
   if (systemMode == 0) return;
-  
-  //
-  // Temp throttle sanity check
-  // 
+  if (commandTime == 0) commandTime = currentTime + 5000000;
   
   int throttle = engines.getThrottle();
-  if (throttle > 480) engines.setThrottle(480);
   
   //
   // Auto-arm after 10s
   //
   
-  if (!engines.isArmed() && currentTime >= 10000000){
+  if (!engines.isArmed() && currentTime >= commandTime){
     engines.arm(0);
     isClimbing = true;
     
@@ -50,7 +46,7 @@ void processFlightCommand(){
     // Every 0.8s, go up/down 10 throttle units
     //
     
-    if (currentTime > commandTime){
+    if (currentTime >= commandTime){
       commandTime = currentTime + 80000;
       
       if (isClimbing){
