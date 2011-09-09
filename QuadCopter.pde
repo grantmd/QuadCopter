@@ -37,6 +37,9 @@ INS ins;
 #include "Engines.h"
 Engines engines;
 
+#include "Receiver.h"
+Receiver receiver;
+
 // Status
 byte systemMode = 0; // 0: Manual, 1: Auto, 2: PID Test
 
