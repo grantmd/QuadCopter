@@ -62,3 +62,12 @@
 #define MIN_ACCEL_ROLL -271
 #define MIN_ACCEL_PITCH -260
 #define MIN_ACCEL_YAW 510
+
+// Receiver
+#define CHANNELS 6
+#define THROTTLE_CHANNEL 0
+#define YAW_CHANNEL 1
+#define PITCH_CHANNEL 2
+#define ROLL_CHANNEL 3
+#define GEAR_CHANNEL 4
+#define AUX_CHANNEL 5

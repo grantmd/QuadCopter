@@ -91,6 +91,7 @@ void loop(){
   accel.updateAll();
   imu.update(deltaTime/1000, gyro.getRoll(), gyro.getPitch(), gyro.getYaw(), accel.getYAngle(), accel.getXAngle(), accel.getZAngle());
   ins.update(deltaTime/1000, accel.getRoll(), accel.getPitch(), accel.getYaw(), imu.getHeading());
+  receiver.updateAll();
 
   //
   // Decide what to do and do it (flight control)

@@ -27,7 +27,13 @@ class Receiver
   public:
     Receiver();
     
+    void updateAll();
+    int getChannel(byte channel);
+    int getAngle(byte channel);
+    
   private:
+    int channels[6]; // Channel-to-pin assignments
+    int readings[6]; // Current values for the channels
 };
 
 #endif

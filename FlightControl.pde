@@ -55,6 +55,12 @@ void processFlightControl(){
     }
     
     float G_Dt = deltaTime / 1000000.0; // Delta time in seconds
+
+    // What does the receiver say?
+    engines.setThrottle(receiver.getChannel(THROTTLE_CHANNEL)-+ MIN_MOTOR_SPEED);
+    targetRoll = receiver.getAngle(ROLL_CHANNEL);
+    targetPitch = receiver.getAngle(PITCH_CHANNEL);
+    targetHeading = receiver.getAngle(YAW_CHANNEL);
     
     // Negative values mean the right side is up
     // Constrain to 45 degrees, because beyond that, we're fucked anyway

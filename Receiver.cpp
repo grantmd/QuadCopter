@@ -22,5 +22,37 @@
 #include "Receiver.h"
 
 Receiver::Receiver(){
+  // These may seem arbitrary, but they are what the AeroQuad software uses,
+  // so I am using the same, for consistency
+  channels[THROTTLE_CHANNEL] = 4; // Throttle
+  channels[YAW_CHANNEL] = 2; // Aile / Yaw
+  channels[PITCH_CHANNEL] = 5; // Elev. / Pitch
+  channels[ROLL_CHANNEL] = 6; // Rudd. / Roll
+  channels[GEAR_CHANNEL] = 7; // Gear
+  channels[AUX_CHANNEL] = 8; // Aux / Flt Mode
+  
+  // Assign all pins for reading
+  for (int i=0; i<6; i++){
+    pinMode(channels[i], INPUT);
+  }
 }
 
+void Receiver::updateAll(){
+  int temp;
+  int i;
+  
+  // Read all the channels. Worst case, this will take 180us
+  for (i=0; i<CHANNELS; i++){
+    temp = pulseIn(channels[i], HIGH, 20000); // Attempt to read a pulse for 20us
+    if (temp != 0) readings[i] = temp; // A value of 0 means that the read timed out, so we keep our previous value
+  }
+}
+
+int Receiver::getChannel(byte channel){
+  return channels[channel];
+}
+
+int Receiver::getAngle(byte channel){
+  // Scale 1000-2000 usecs to -45 to 45 degrees
+  return (0.09 * channels[channel]) - 135;
+}
