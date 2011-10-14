@@ -277,12 +277,12 @@ void sendSerialTelemetry(){
       Serial.println(0); // TODO?
       break;
     case 'V': // Send receiver status
-      serialPrintValueComma(1000); // TODO?
-      serialPrintValueComma(1000); // TODO?
-      serialPrintValueComma(1000); // TODO?
-      serialPrintValueComma(1000); // TODO?
-      serialPrintValueComma(1000); // TODO?
-      Serial.println(1000); // TODO?
+      serialPrintValueComma(receiver.getChannel(ROLL_CHANNEL));
+      serialPrintValueComma(receiver.getChannel(PITCH_CHANNEL));
+      serialPrintValueComma(receiver.getChannel(YAW_CHANNEL));
+      serialPrintValueComma(receiver.getChannel(THROTTLE_CHANNEL));
+      serialPrintValueComma(receiver.getChannel(GEAR_CHANNEL));
+      Serial.println(receiver.getChannel(AUX_CHANNEL));
       break;
     case 'X': // Stop sending messages
       break;
