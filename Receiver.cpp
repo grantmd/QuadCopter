@@ -24,10 +24,12 @@
 Receiver::Receiver(){
   // These may seem arbitrary, but they are what the AeroQuad software uses,
   // so I am using the same, for consistency
+  //
+  // However, for some reason that I have not yet discovered, Yaw and Roll seem to be swapped from what my receiver is labeled
   channels[THROTTLE_CHANNEL] = 4; // Throttle
-  channels[YAW_CHANNEL] = 2; // Aile / Yaw
+  channels[ROLL_CHANNEL] = 2; // Rudd. / Roll
   channels[PITCH_CHANNEL] = 5; // Elev. / Pitch
-  channels[ROLL_CHANNEL] = 6; // Rudd. / Roll
+  channels[YAW_CHANNEL] = 6; // Aile / Yaw
   channels[GEAR_CHANNEL] = 7; // Gear
   channels[AUX_CHANNEL] = 8; // Aux / Flt Mode
   
@@ -49,10 +51,10 @@ void Receiver::updateAll(){
 }
 
 int Receiver::getChannel(byte channel){
-  return channels[channel];
+  return readings[channel];
 }
 
 int Receiver::getAngle(byte channel){
   // Scale 1000-2000 usecs to -45 to 45 degrees
-  return (0.09 * channels[channel]) - 135;
+  return (0.09 * readings[channel]) - 135;
 }
