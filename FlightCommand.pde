@@ -24,8 +24,36 @@ unsigned long commandTime = 0;
 
 void processFlightCommand(){   
   
-  // If we are in manual mode, quit
-  if (systemMode == 0) return;
+  // Which mode?
+  if (systemMode == 0){
+    return processReceiverCommands();
+  }
+  
+  return processAutoPilot();
+
+}
+
+void processReceiverCommands(){
+  // Arm the engines by putting the left stick in the lower-right corner
+  if (receiver.getChannel(THROTTLE_CHANNEL) < 1100 && receiver.getChannel(YAW_CHANNEL) > 1850){
+    Serial.println("Arming");
+    engines.arm(0);
+  }
+  else if (receiver.getChannel(THROTTLE_CHANNEL) < 1100){
+    Serial.println(receiver.getChannel(YAW_CHANNEL));
+  }
+  
+  // Disarm the engines by putting the left stick in the lower-left corner
+  if (receiver.getChannel(THROTTLE_CHANNEL) < 1100 && receiver.getChannel(YAW_CHANNEL) < 1100){
+    Serial.println("Disarming");
+    engines.disarm();
+  }
+  
+  // Process throttle
+  engines.setThrottle(receiver.getChannel(THROTTLE_CHANNEL)-MIN_MOTOR_SPEED); // Engines expect throttle to be 0-based
+}
+
+void processAutoPilot(){
   if (commandTime == 0) commandTime = currentTime + 5000000;
   
   int throttle = engines.getThrottle();
