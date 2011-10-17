@@ -42,12 +42,13 @@ Receiver receiver;
 
 // Status
 byte systemMode = 0; // 0: Manual, 1: Auto, 2: PID Test
+byte activityLight = 0; // 0: Off, 1: On
 
-int pos = 0;
 unsigned long previousTime = 0;
 unsigned long currentTime = 0;
 unsigned long deltaTime = 0;
 unsigned long serialTime = 0;
+unsigned long activityTime = 0;
 
 void setup(){
   Serial.begin(115200);
@@ -73,9 +74,7 @@ void setup(){
   previousTime = micros();
 }
 
-void loop(){
-  digitalWrite(GREEN_LED, HIGH);
-    
+void loop(){ 
   //
   // Measure loop rate
   //
@@ -116,5 +115,17 @@ void loop(){
     sendSerialTelemetry();
   }
   
-  digitalWrite(GREEN_LED, LOW);
+  if (currentTime > activityTime){
+    activityTime = currentTime + ACTIVITY_RATE;
+    
+    if (activityLight == 1){
+      digitalWrite(GREEN_LED, LOW);
+      activityLight = 0;
+    }
+    else{
+      digitalWrite(GREEN_LED, HIGH);
+      activityLight = 1;
+    }
+  }
+  
 }

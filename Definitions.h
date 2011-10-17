@@ -48,11 +48,12 @@
 
 #define VERSION 2.3 // Emulate Aeroquad
 
-#define SERIAL_RATE 1000 // How long between running the serial code?
+#define SERIAL_RATE 1000 // How long between running the serial code, in microseconds?
 
 // Activity
 #define RED_LED 12 // Armed
 #define GREEN_LED 13 // Loop is running
+#define ACTIVITY_RATE 500000 // How long between activity light blinks, in microseconds?
 
 // Measured raw accel values by putting the quadcopter on all 6 sides
 #define MAX_ACCEL_ROLL 269
