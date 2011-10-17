@@ -83,7 +83,7 @@ void eeprom_write(int address, float value){
 }
 
 // Turn an int into 2 bytes and write them to eeprom
-float eeprom_write(int address, int value){
+void eeprom_write(int address, int value){
   // a union is a datatype that allows us to write to it in bytes and read back as an int
   // (and vice versa)
   union intStore{
