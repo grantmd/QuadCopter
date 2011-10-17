@@ -1,3 +1,5 @@
+# A rake file for compiling and uploading this Arduino project
+# Created by Myles Grant <myles@mylesgrant.com>
 # Adapted from: https://github.com/AndrewVos/arduino-tools
 
 require 'tempfile'
