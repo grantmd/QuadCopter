@@ -58,6 +58,7 @@ void setup(){
   // Activity LEDs
   //
   pinMode(RED_LED, OUTPUT);
+  pinMode(YELLOW_LED, OUTPUT);
   pinMode(GREEN_LED, OUTPUT);
   
   //

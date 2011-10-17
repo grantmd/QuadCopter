@@ -51,7 +51,8 @@
 #define SERIAL_RATE 1000 // How long between running the serial code, in microseconds?
 
 // Activity
-#define RED_LED 12 // Armed
+#define RED_LED 31 // Armed
+#define YELLOW_LED 12 // Flight mode
 #define GREEN_LED 13 // Loop is running
 #define ACTIVITY_RATE 500000 // How long between activity light blinks, in microseconds?
 
