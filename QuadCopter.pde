@@ -20,7 +20,7 @@
 // Include libs
 #include <Wire.h>
 #include "Definitions.h"
-#include "EEPROM.h"
+#include "EEPROM_lib.h"
 
 #include "Gyro.h"
 #include "Accel.h"

@@ -24,7 +24,7 @@
 #include "Accel.h"
 #include "I2C.h"
 #include "Utils.h"
-#include "EEPROM.h"
+#include "EEPROM_lib.h"
 
 Accel::Accel() : I2C(){
   _smoothFactor = 0.8;

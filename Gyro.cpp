@@ -24,7 +24,7 @@
 #include "Gyro.h"
 #include "I2C.h"
 #include "Utils.h"
-#include "EEPROM.h"
+#include "EEPROM_lib.h"
 
 Gyro::Gyro() : I2C(){
   _scaleFactor = radians(1.0 / 14.375); // ITG3200 14.375 LSBs per °/sec
