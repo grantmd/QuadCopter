@@ -50,6 +50,7 @@ void Receiver::updateAll(){
   }
 }
 
+// TODO: Apply some sort of centering to these, since the offsets differ from receiver to receiver
 int Receiver::getChannel(byte channel){
   return readings[channel];
 }
