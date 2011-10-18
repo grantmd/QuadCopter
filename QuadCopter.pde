@@ -45,6 +45,9 @@ Engines engines;
 #include "Receiver.h"
 Receiver receiver;
 
+#include "Battery.h"
+Battery battery;
+
 // Status
 byte systemMode = 0; // 0: Manual, 1: Auto, 2: PID Test
 byte activityLight = 0; // 0: Off, 1: On
@@ -70,6 +73,7 @@ void setup(){
   // Run inits
   //
   engines.init();
+
   gyro.init();
   accel.init();
   baro.init();
@@ -101,6 +105,7 @@ void loop(){
   imu.update(deltaTime/1000, gyro.getRoll(), gyro.getPitch(), gyro.getYaw(), accel.getYAngle(), accel.getXAngle(), accel.getZAngle());
   ins.update(deltaTime/1000, accel.getRoll(), accel.getPitch(), accel.getYaw(), imu.getHeading());
   receiver.updateAll();
+  battery.measure();
 
   //
   // Decide what to do and do it (flight control)
