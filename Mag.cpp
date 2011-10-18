@@ -36,12 +36,23 @@ void Mag::init(){
     //Serial.println("MAG NOT CONNECTED!");
   }
   else{
+    Wire.send(0x02); // select mode register
+    Wire.send(0x00); // continuous measurement mode
   }
 }
 
 // Updates all raw measurements from the magnetometer
 void Mag::updateAll(){
+  sendReadRequest(0x03);
+  requestBytes(6);
+
+  for (byte axis = XAXIS; axis <= ZAXIS; axis++){
+     dataRaw[axis] = readNextWordFlip();
+  }
 }
 
 ///////////
 
+int Mag::getRaw(byte axis){
+  return dataRaw[axis];
+}

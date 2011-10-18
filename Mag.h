@@ -31,9 +31,14 @@ class Mag : public I2C
     void init();
     
     void updateAll();
+
+    // The raw values from the sensor
+    int getRaw(byte axis);
     
   private:
     I2C _i2c;
+
+    int dataRaw[3]; // Raw and unfiltered data
 };
 
 #endif
