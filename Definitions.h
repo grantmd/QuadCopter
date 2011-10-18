@@ -38,6 +38,7 @@
 #define GYRO_ADDR 0x68
 #define ACCEL_ADDR 0x53
 #define BARO_ADDR 0x77
+#define MAG_ADDR 0x1E
 
 #define ROLL 0
 #define PITCH 1

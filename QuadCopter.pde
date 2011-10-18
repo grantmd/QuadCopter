@@ -26,6 +26,7 @@
 #include "Gyro.h"
 #include "Accel.h"
 #include "Baro.h"
+#include "Mag.h"
 #include "IMU.h"
 #include "INS.h"
 
@@ -34,6 +35,7 @@
 Gyro gyro;
 Accel accel;
 Baro baro;
+Mag mag;
 IMU imu;
 INS ins;
 
@@ -71,6 +73,7 @@ void setup(){
   gyro.init();
   accel.init();
   baro.init();
+  mag.init();
   
   //
   // It's go time
@@ -94,6 +97,7 @@ void loop(){
   gyro.updateAll();
   accel.updateAll();
   baro.updateAll();
+  mag.updateAll();
   imu.update(deltaTime/1000, gyro.getRoll(), gyro.getPitch(), gyro.getYaw(), accel.getYAngle(), accel.getXAngle(), accel.getZAngle());
   ins.update(deltaTime/1000, accel.getRoll(), accel.getPitch(), accel.getYaw(), imu.getHeading());
   receiver.updateAll();
