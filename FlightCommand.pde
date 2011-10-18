@@ -36,7 +36,6 @@ void processFlightCommand(){
 void processReceiverCommands(){
   // Arm the engines by putting the left stick in the lower-right corner
   if (receiver.getChannel(THROTTLE_CHANNEL) < 1100 && receiver.getChannel(YAW_CHANNEL) > 1850){
-    Serial.println("Arming");
     engines.arm(0);
   }
   else if (receiver.getChannel(THROTTLE_CHANNEL) < 1100){
@@ -45,7 +44,6 @@ void processReceiverCommands(){
   
   // Disarm the engines by putting the left stick in the lower-left corner
   if (receiver.getChannel(THROTTLE_CHANNEL) < 1100 && receiver.getChannel(YAW_CHANNEL) < 1100){
-    Serial.println("Disarming");
     engines.disarm();
   }
   
