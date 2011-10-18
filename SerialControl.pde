@@ -109,7 +109,7 @@ void readSerialCommand(){
       case '$': // Set throttle
         engines.setThrottle(readIntSerial());
         break;
-      case 'S': // Set system mode
+      case 's': // Set system mode
         systemMode = readIntSerial();
         _queryType = 'X';
         break;
