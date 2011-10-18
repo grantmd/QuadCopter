@@ -38,9 +38,6 @@ void processReceiverCommands(){
   if (receiver.getChannel(THROTTLE_CHANNEL) < 1100 && receiver.getChannel(YAW_CHANNEL) > 1850){
     engines.arm(0);
   }
-  else if (receiver.getChannel(THROTTLE_CHANNEL) < 1100){
-    Serial.println(receiver.getChannel(YAW_CHANNEL));
-  }
   
   // Disarm the engines by putting the left stick in the lower-left corner
   if (receiver.getChannel(THROTTLE_CHANNEL) < 1100 && receiver.getChannel(YAW_CHANNEL) < 1100){
