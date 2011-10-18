@@ -39,9 +39,29 @@ void Baro::init(){
   }
 }
 
-// Updates all raw measurements from the barometer
-void Baro::updateAll(){
+// Calculate altitude from the barometer
+void Baro::measure(){
 }
 
 ///////////
 
+// How far off the ground are we, in meters?
+float Baro::getAltitude(){
+  return getRawAltitude() - getGroundAltitude();
+}
+
+// Where's the ground, in meters? (Where we took off from)
+float Baro::getGroundAltitude(){
+  return _groundAltitude;
+}
+
+// Raw altitude above sea level, in meters
+float Baro::getRawAltitude(){
+  return _altitude;
+}
+
+///////////
+
+void Baro::setGroundAltitude(){
+  _groundAltitude = getRawAltitude();
+}

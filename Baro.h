@@ -30,10 +30,18 @@ class Baro : public I2C
     Baro();
     void init();
     
-    void updateAll();
+    void measure();
+
+    float getAltitude();
+    float getGroundAltitude();
+    float getRawAltitude();
     
+    void setGroundAltitude();
   private:
     I2C _i2c;
+
+    float _altitude;
+    float _groundAltitude;
 };
 
 #endif

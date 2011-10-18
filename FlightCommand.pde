@@ -37,6 +37,7 @@ void processReceiverCommands(){
   // Arm the engines by putting the left stick in the lower-right corner
   if (receiver.getChannel(THROTTLE_CHANNEL) < 1100 && receiver.getChannel(YAW_CHANNEL) > 1850){
     engines.arm(0);
+    baro.setGroundAltitude();
   }
   
   // Disarm the engines by putting the left stick in the lower-left corner
@@ -59,6 +60,8 @@ void processAutoPilot(){
   
   if (!engines.isArmed() && currentTime >= commandTime){
     engines.arm(0);
+    baro.setGroundAltitude();
+    
     isClimbing = true;
     
     // Start in 5s
