@@ -36,8 +36,7 @@ void Mag::init(){
     //Serial.println("MAG NOT CONNECTED!");
   }
   else{
-    Wire.send(0x02); // select mode register
-    Wire.send(0x00); // continuous measurement mode
+    writeSetting(0x02, 0x00); // continuous measurement mode
   }
 }
 
