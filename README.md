@@ -6,9 +6,11 @@ I am making a QuadCopter. Everything is done from scratch, since the whole point
 Parts
 -----
 
-* Arduino Uno
+* Arduino Mega
 * Sparkfun IMU Digital Combo Board - 6 Degrees of Freedom ITG3200/ADXL345
 * Sparkfun Logic Level Converter
+* Sparkfun Triple Axis Magnetometer Breakout - HMC5883L
+* Sparkfun Barometric Pressure Sensor - BMP085 Breakout
 * 4 E-flite Park 400 motors
 * 4 E-flite 20-amp ESCs
 * Tons of patience
