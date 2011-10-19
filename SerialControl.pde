@@ -138,7 +138,13 @@ void sendSerialTelemetry(){
       serialPrintPID(levelRollPID);
       serialPrintPID(levelPitchPID);
       //serialPrintPID(6); // TODO: LEVELGYROROLL
+      serialPrintValueComma(0.00);
+      serialPrintValueComma(0.00);
+      serialPrintValueComma(0.00);
       //serialPrintPID(7); // TODO: LEVELGYROPITCH
+      serialPrintValueComma(0.00);
+      serialPrintValueComma(0.00);
+      serialPrintValueComma(0.00);
       Serial.println(WINDUP_GUARD_GAIN); // TODO: windup guard
       _queryType = 'X';
       break;
@@ -203,19 +209,17 @@ void sendSerialTelemetry(){
       serialPrintValueComma(accel.getRoll());
       serialPrintValueComma(accel.getPitch());
       serialPrintValueComma(accel.getYaw());
+
+      serialPrintValueComma(mag.getRaw(XAXIS));
+      serialPrintValueComma(mag.getRaw(YAXIS));
+      serialPrintValueComma(mag.getRaw(ZAXIS));
       
       serialPrintValueComma(imu.getRoll());
       serialPrintValueComma(imu.getPitch());
       
-      serialPrintValueComma(0); // TODO: Heading
-      serialPrintValueComma(0); // Altitude hold
-      Serial.print(0); // Battery monitor
-      Serial.println();
+      Serial.println(0); // TODO: Heading
       break;
-    case 'R': // Raw magnetometer data
-      serialPrintValueComma(0);
-      serialPrintValueComma(0);
-      Serial.println('0');
+    case 'R': // *** Spare ***
       break;
     case 'S': // Send all flight data
       serialPrintValueComma(deltaTime);
@@ -224,6 +228,9 @@ void sendSerialTelemetry(){
       serialPrintValueComma(gyro.getRawRoll());
       serialPrintValueComma(gyro.getRawPitch());
       serialPrintValueComma(gyro.getRawYaw());
+      serialPrintValueComma(accel.getRawRoll());
+      serialPrintValueComma(accel.getRawPitch());
+      serialPrintValueComma(accel.getRawYaw());
 
       serialPrintValueComma(battery.getData()); // Battery monitor
       
@@ -232,21 +239,12 @@ void sendSerialTelemetry(){
       serialPrintValueComma(0); // TODO: Motor axis commands
       serialPrintValueComma(0); // TODO: Motor axis commands
       
-      for (byte engine = 0; engine < ENGINE_COUNT; engine++){
-        serialPrintValueComma(engines.getEngineSpeed(engine));
-      }
-      
-      // TODO: These are "raw" in the aeroquad version, but that's pretty useless
-      serialPrintValueComma(accel.getRawRoll());
-      serialPrintValueComma(accel.getRawPitch());
-      serialPrintValueComma(accel.getRawYaw());
-      
       Serial.print(engines.isArmed(), BIN);
       serialComma();
+
+      serialPrintValueComma(2000); // Always stable mode
       
-      serialPrintValueComma(2000); // Stable flight mode
-      
-      serialPrintValueComma(0); // HeadingMagHold
+      serialPrintValueComma(0); // TODO: Heading
       
       serialPrintValueComma(0); // Alt hold data
       Serial.print('0'); // Alt hold on
