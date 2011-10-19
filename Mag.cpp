@@ -36,12 +36,17 @@ void Mag::init(){
     //Serial.println("MAG NOT CONNECTED!");
   }
   else{
+    // TODO: put in self-test and calibrate
+
     writeSetting(0x02, 0x00); // continuous measurement mode
   }
 }
 
 // Updates all raw measurements from the magnetometer
 void Mag::updateAll(){
+  // TODO: pass in pitch and roll to apply tilt compensation at measurement time
+  // TODO: take calibration into account
+
   sendReadRequest(0x03);
   requestBytes(6);
 
