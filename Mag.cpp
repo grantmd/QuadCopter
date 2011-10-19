@@ -16,6 +16,9 @@
 
   You should have received a copy of the GNU General Public License 
   along with this program. If not, see <http://www.gnu.org/licenses/>. 
+
+  A good tutorial:
+  https://www.loveelectronics.co.uk/Tutorials/8/hmc5883l-tutorial-and-arduino-library
 */
 
 #include "WProgram.h"
@@ -60,4 +63,16 @@ void Mag::updateAll(){
 
 int Mag::getRaw(byte axis){
   return dataRaw[axis];
+}
+
+float Mag::getHeading(){
+  // Calculate heading when the magnetometer is level, then correct for signs of axis.
+  float heading = atan2(getRaw(YAXIS), getRaw(XAXIS));
+   
+  // Correct for when signs are reversed.
+  if (heading < 0)
+    heading += (2 * PI);
+  
+  // TODO: Correct for declination at my house
+  return heading;
 }

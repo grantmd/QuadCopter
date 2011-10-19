@@ -34,6 +34,8 @@ class Mag : public I2C
 
     // The raw values from the sensor
     int getRaw(byte axis);
+
+    float getHeading();
     
   private:
     I2C _i2c;
