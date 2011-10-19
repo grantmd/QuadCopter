@@ -225,7 +225,7 @@ void sendSerialTelemetry(){
       serialPrintValueComma(gyro.getRawPitch());
       serialPrintValueComma(gyro.getRawYaw());
 
-      serialPrintValueComma(0); // Battery monitor
+      serialPrintValueComma(battery.getData()); // Battery monitor
       
       serialPrintValueComma(0); // TODO: Motor axis commands
       serialPrintValueComma(0); // TODO: Motor axis commands
@@ -335,6 +335,8 @@ void sendSerialTelemetry(){
       serialPrintValueComma(gyro.getPitch());
       serialPrintValueComma(gyro.getYaw());
       
+      serialPrintValueComma(battery.getData());
+
       serialPrintValueComma(engines.getThrottle());
       
       for (byte engine = 0; engine < ENGINE_COUNT; engine++){
