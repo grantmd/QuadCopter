@@ -35,13 +35,39 @@ class Baro : public I2C
     float getAltitude();
     float getGroundAltitude();
     float getRawAltitude();
+
+    short getTemp();
+    long getPressure();
     
     void setGroundAltitude();
   private:
+    void readUT(); // Uncompensated temperature
+    unsigned int _ut;
+    void readUP(); // Uncompensated pressure
+    unsigned long _up;
+
+    short _temp;
+    long _pressure;
+
     I2C _i2c;
 
     float _altitude;
     float _groundAltitude;
+
+    byte _overSamplingSetting;
+
+    // Calibration values
+    int _ac1;
+    int _ac2; 
+    int _ac3; 
+    unsigned int _ac4;
+    unsigned int _ac5;
+    unsigned int _ac6;
+    int _b1; 
+    int _b2;
+    int _mb;
+    int _mc;
+    int _md;
 };
 
 #endif
