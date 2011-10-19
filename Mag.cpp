@@ -50,6 +50,7 @@ void Mag::updateAll(){
   sendReadRequest(0x03);
   requestBytes(6);
 
+  // TODO: verify that this isn't actually x,z,y (from the datasheet)
   for (byte axis = XAXIS; axis <= ZAXIS; axis++){
      dataRaw[axis] = readNextWordFlip();
   }
