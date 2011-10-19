@@ -25,7 +25,6 @@
 #include "Definitions.h"
 #include "Mag.h"
 #include "I2C.h"
-#include "Utils.h"
 #include "EEPROM_lib.h"
 
 Mag::Mag() : I2C(){
