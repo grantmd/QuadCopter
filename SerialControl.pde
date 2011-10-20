@@ -216,8 +216,7 @@ void sendSerialTelemetry(){
       
       serialPrintValueComma(imu.getRoll());
       serialPrintValueComma(imu.getPitch());
-      
-      Serial.println(0); // TODO: Heading
+      Serial.println(imu.getHeading());
       break;
     case 'R': // *** Spare ***
       break;
