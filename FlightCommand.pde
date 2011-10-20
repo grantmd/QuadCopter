@@ -35,18 +35,18 @@ void processFlightCommand(){
 
 void processReceiverCommands(){
   // Arm the engines by putting the left stick in the lower-right corner
-  if (receiver.getChannel(THROTTLE_CHANNEL) < 1100 && receiver.getChannel(YAW_CHANNEL) > 1850){
+  if (receiver.getSmoothedChannel(THROTTLE_CHANNEL) < 1100 && receiver.getSmoothedChannel(YAW_CHANNEL) > 1850){
     engines.arm(0);
     baro.setGroundAltitude();
   }
   
   // Disarm the engines by putting the left stick in the lower-left corner
-  if (receiver.getChannel(THROTTLE_CHANNEL) < 1100 && receiver.getChannel(YAW_CHANNEL) < 1100){
+  if (receiver.getSmoothedChannel(THROTTLE_CHANNEL) < 1100 && receiver.getSmoothedChannel(YAW_CHANNEL) < 1100){
     engines.disarm();
   }
   
   // Process throttle
-  engines.setThrottle(receiver.getChannel(THROTTLE_CHANNEL)-MIN_MOTOR_SPEED); // Engines expect throttle to be 0-based
+  engines.setThrottle(receiver.getSmoothedChannel(THROTTLE_CHANNEL)-MIN_MOTOR_SPEED); // Engines expect throttle to be 0-based
 }
 
 void processAutoPilot(){

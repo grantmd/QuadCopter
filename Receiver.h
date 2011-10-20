@@ -29,11 +29,15 @@ class Receiver
     
     void updateAll();
     int getChannel(byte channel);
-    int getAngle(byte channel);
+    float getSmoothedChannel(byte channel);
+    float getAngle(byte channel);
     
   private:
     int channels[6]; // Channel-to-pin assignments
     int readings[6]; // Current values for the channels
+    float smoothed[6]; // Current smoothed values for the channels
+
+    float _smoothFactor; // Smoothing for all channels
 };
 
 #endif

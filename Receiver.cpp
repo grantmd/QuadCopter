@@ -20,6 +20,7 @@
 #include "WProgram.h"
 #include "Definitions.h"
 #include "Receiver.h"
+#include "Utils.h"
 
 Receiver::Receiver(){
   // These may seem arbitrary, but they are what the AeroQuad software uses,
@@ -37,6 +38,8 @@ Receiver::Receiver(){
   for (int i=0; i<6; i++){
     pinMode(channels[i], INPUT);
   }
+
+  _smoothFactor = 1.0;
 }
 
 void Receiver::updateAll(){
@@ -46,7 +49,10 @@ void Receiver::updateAll(){
   // Read all the channels. Worst case, this will take 180us
   for (i=0; i<CHANNELS; i++){
     temp = pulseIn(channels[i], HIGH, 20000); // Attempt to read a pulse for 20us
-    if (temp != 0) readings[i] = temp; // A value of 0 means that the read timed out, so we keep our previous value
+    if (temp != 0){ // A value of 0 means that the read timed out, so we keep our previous value
+      smoothed[i] = filterSmooth(temp, readings[i], _smoothFactor); // Apply smoothing
+      readings[i] = temp;
+    }
   }
 }
 
@@ -55,7 +61,11 @@ int Receiver::getChannel(byte channel){
   return readings[channel];
 }
 
-int Receiver::getAngle(byte channel){
+float Receiver::getSmoothedChannel(byte channel){
+  return smoothed[channel];
+}
+
+float Receiver::getAngle(byte channel){
   // Scale 1000-2000 usecs to -45 to 45 degrees
-  return (0.09 * readings[channel]) - 135;
+  return (0.09 * smoothed[channel]) - 135;
 }
