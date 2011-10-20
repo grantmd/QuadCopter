@@ -48,6 +48,7 @@ void Baro::init(){
   }
   else{
     // Read calibration data
+    // The barometer is calibrated at the factory, and those settings are written to EEPROM
     sendReadRequest(0xAA);
     _ac1 = readWord();
     sendReadRequest(0xAC);
