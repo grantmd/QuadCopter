@@ -19,3 +19,12 @@ Software Model
 --------------
 
 https://docs.google.com/drawings/edit?id=16oIVzLJfiHQFph_YqQho9tQ16BCHU11p3ffUwpTAt9U&hl=en&authkey=CO-kjOkC
+
+Further Reading
+---------------
+
+* http://code.google.com/p/gentlenav/wiki/Home
+* http://web.mit.edu/scolton/www/filter.pdf
+* http://tom.pycke.be/mav/71/kalman-filtering-of-imu-data
+* http://www.arduino.cc/cgi-bin/yabb2/YaBB.pl?num=1248889032/35
+* http://www.freescale.com/files/sensors/doc/app_note/AN3397.pdf
