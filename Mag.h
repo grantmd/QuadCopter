@@ -36,6 +36,7 @@ class Mag : public I2C
     int getRaw(byte axis);
 
     float getHeading();
+    float getHeadingDegrees();
     
   private:
     I2C _i2c;

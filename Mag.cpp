@@ -64,6 +64,7 @@ int Mag::getRaw(byte axis){
   return dataRaw[axis];
 }
 
+// Our compass heading, in radians
 float Mag::getHeading(){
   // Calculate heading when the magnetometer is level, then correct for signs of axis.
   float heading = atan2(getRaw(YAXIS), getRaw(XAXIS));
@@ -74,4 +75,9 @@ float Mag::getHeading(){
   
   // TODO: Correct for declination at my house
   return heading;
+}
+
+// Our compass heading in degrees
+float Mag::getHeadingDegrees(){
+  return getHeading() * 180 / PI;
 }
