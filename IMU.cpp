@@ -43,12 +43,11 @@ IMU::IMU(){
 // dT is in milliseconds
 // g* is gyro rotation rate in degrees/s
 // a* is current angle in degrees
-void IMU::update(int dT, float gx, float gy, float gz, float ax, float ay, float az){
+// heading is magnetometer heading in degrees
+void IMU::update(int dT, float gx, float gy, float gz, float ax, float ay, float az, float heading){
   updateAxis(ROLL, dT, gx, ax);
   updateAxis(PITCH, dT, gy, ay);
-  
-  // YAW/Heading is based on gyro only
-  data[YAW] = data[YAW] + (gz * dT * _dtGyro);
+  updateAxis(YAW, dT, gz, heading);
 }
 
 // Get filtered roll angle
@@ -63,7 +62,7 @@ float IMU::getPitch(){
   return data[PITCH];
 }
 
-// Angle from our starting heading, using gyro data only (susceptible to gyro drift)
+// Our absolute compass direction in degrees
 float IMU::getHeading(){
   return data[YAW];
 }

@@ -27,7 +27,7 @@ class IMU
   public:
     IMU();
     
-    void update(int, float, float, float, float, float, float);
+    void update(int, float, float, float, float, float, float, float);
     
     float getRoll();
     float getPitch();
