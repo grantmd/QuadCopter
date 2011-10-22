@@ -72,6 +72,8 @@ void setup(){
   //
   // Run inits
   //
+
+  battery.init();
   engines.init();
 
   gyro.init();

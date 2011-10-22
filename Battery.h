@@ -26,6 +26,7 @@ class Battery
 {
   public:
     Battery();
+    void init();
 
     void measure();
 

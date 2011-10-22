@@ -25,10 +25,14 @@ Battery::Battery(){
   _batteryScaleFactor = ((BATTERY_AREF / 1024.0) * ((BATTERY_R1 + BATTERY_R2) / BATTERY_R2));
 }
 
-void Battery::measure() {
+void Battery::init(){
+  analogReference(DEFAULT);
+}
+
+void Battery::measure(){
   _batteryVoltage = (analogRead(BATTERY_PIN) * _batteryScaleFactor) + BATTERY_DIODE;
 }
 
-float Battery::getData() {
+float Battery::getData(){
   return _batteryVoltage;
 }
