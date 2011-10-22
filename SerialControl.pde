@@ -243,12 +243,10 @@ void sendSerialTelemetry(){
 
       serialPrintValueComma(2000); // Always stable mode
       
-      serialPrintValueComma(0); // TODO: Heading
+      serialPrintValueComma(imu.getHeading()); // Heading
       
-      serialPrintValueComma(0); // Alt hold data
-      Serial.print('0'); // Alt hold on
-      
-      Serial.println();
+      serialPrintValueComma(baro.getRawAltitude()); // Alt hold data
+      Serial.println(0); // Alt hold on
       break;
     case 'T': // Send processed transmitter values
       serialPrintValueComma(0); // TODO? receiver transmit factor
@@ -332,6 +330,11 @@ void sendSerialTelemetry(){
       serialPrintValueComma(gyro.getPitch());
       serialPrintValueComma(gyro.getYaw());
       
+      serialPrintValueComma(mag.getRaw(XAXIS));
+      serialPrintValueComma(mag.getRaw(YAXIS));
+      serialPrintValueComma(mag.getRaw(ZAXIS));
+      
+      serialPrintValueComma(baro.getRawAltitude());
       serialPrintValueComma(battery.getData());
 
       serialPrintValueComma(engines.getThrottle());
