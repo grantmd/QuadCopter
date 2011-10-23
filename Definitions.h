@@ -78,7 +78,7 @@
 
 // Battery monitor
 #define BATTERY_PIN 0 // This is the same on every arduino
-#define BATTERY_R1 14560 // 15k resistor measured with a multimeter
-#define BATTERY_R2 7390 // 7.5k resistor measured with a multimeter
+#define BATTERY_R1 14560.0 // 15k resistor measured with a multimeter, must be a float!
+#define BATTERY_R2 7390.0 // 7.5k resistor measured with a multimeter, must be a float!
 #define BATTERY_AREF 5.0 // Arduino Mega runs at 5v
 #define BATTERY_DIODE 0.9 // On-board diode, measured with a multimeter
