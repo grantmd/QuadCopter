@@ -34,13 +34,14 @@ Receiver::Receiver(){
   channels[GEAR_CHANNEL] = 7; // Gear
   channels[AUX_CHANNEL] = 8; // Aux / Flt Mode
   
+  int i;
   // Assign all pins for reading
-  for (int i=0; i<CHANNELS; i++){
+  for (i=0; i<CHANNELS; i++){
     pinMode(channels[i], INPUT);
   }
 
   // Init the readings at something sensible
-  for (int i=0; i<CHANNELS; i++){
+  for (i=0; i<CHANNELS; i++){
     smoothed[i] = (i == THROTTLE_CHANNEL) ? 1000 : 1500;
     readings[i] = smoothed[i];
   }
