@@ -27,10 +27,27 @@ Battery::Battery(){
 
 void Battery::init(){
   analogReference(DEFAULT);
+  _alarmTime = millis();
+  _alarmLight = 0;
 }
 
 void Battery::measure(){
+  long currentTime = micros();
   _batteryVoltage = (analogRead(BATTERY_PIN) * _batteryScaleFactor) + BATTERY_DIODE;
+  
+  if (_batteryVoltage <= ALARM_VOLTAGE){
+    if (currentTime > _alarmTime){
+      currentTime = _alarmTime + ALARM_RATE;
+      if (_alarmLight == 1){
+        digitalWrite(RED_LED, LOW);
+        _alarmLight = 0;
+      }
+      else{
+        digitalWrite(RED_LED, HIGH);
+        _alarmLight = 1;
+      }
+    }
+  }
 }
 
 float Battery::getData(){

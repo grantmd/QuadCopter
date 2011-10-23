@@ -53,10 +53,11 @@
 #define SERIAL_RATE 1000 // How long between running the serial code, in microseconds?
 
 // Activity
-#define RED_LED 31 // Armed
+#define RED_LED 31 // Battery alarm
 #define YELLOW_LED 12 // Flight mode
 #define GREEN_LED 13 // Loop is running
 #define ACTIVITY_RATE 500000 // How long between activity light blinks, in microseconds?
+#define ALARM_RATE 250000 // How long between activity light blinks, in microseconds?
 
 // Measured raw accel values by putting the quadcopter on all 6 sides
 #define MAX_ACCEL_ROLL 269
@@ -82,3 +83,4 @@
 #define BATTERY_R2 7390.0 // 7.5k resistor measured with a multimeter, must be a float!
 #define BATTERY_AREF 5.0 // Arduino Mega runs at 5v
 #define BATTERY_DIODE 0.9 // On-board diode, measured with a multimeter
+#define ALARM_VOLTAGE 9.5

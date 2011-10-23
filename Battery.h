@@ -35,6 +35,9 @@ class Battery
   private:
     float _batteryScaleFactor;
     float _batteryVoltage;
+    
+    long _alarmTime;
+    byte _alarmLight;
 };
 
 #endif
