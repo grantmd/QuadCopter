@@ -103,7 +103,7 @@ void loop(){
   gyro.updateAll();
   accel.updateAll();
   baro.measure();
-  mag.updateAll();
+  mag.updateAll(accel.getYAngle(), accel.getXAngle());
   imu.update(deltaTime/1000, gyro.getRoll(), gyro.getPitch(), gyro.getYaw(), accel.getYAngle(), accel.getXAngle(), accel.getZAngle(), mag.getHeadingDegrees());
   ins.update(deltaTime/1000, accel.getRoll(), accel.getPitch(), accel.getYaw(), imu.getHeading());
   receiver.updateAll();

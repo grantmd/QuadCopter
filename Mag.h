@@ -1,6 +1,7 @@
 /*
   Mag.h - Library for interfacing with the HMC5883L Triple Axis Magnetometer from Sparkfun:
   http://www.sparkfun.com/products/10530
+  http://www.sparkfun.com/products/9441 - HMC5843 works as well
   Created by Myles Grant <myles@mylesgrant.com>
   See also: https://github.com/grantmd/QuadCopter
   
@@ -30,10 +31,9 @@ class Mag : public I2C
     Mag();
     void init();
     
-    void updateAll();
+    void updateAll(float roll, float pitch);
 
-    // The raw values from the sensor
-    int getRaw(byte axis);
+    int getRaw(byte axis); // The raw values from the sensor
 
     float getHeading();
     float getHeadingDegrees();
@@ -42,6 +42,7 @@ class Mag : public I2C
     I2C _i2c;
 
     int dataRaw[3]; // Raw and unfiltered data
+    float _heading; // tilt-compensated heading
     float _scale;
 };
 

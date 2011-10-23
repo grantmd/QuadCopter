@@ -1,6 +1,7 @@
 /*
   Mag.cpp - Library for interfacing with the HMC5883L Triple Axis Magnetometer from Sparkfun:
   http://www.sparkfun.com/products/10530
+  http://www.sparkfun.com/products/9441 - HMC5843 works as well
   Created by Myles Grant <myles@mylesgrant.com>
   See also: https://github.com/grantmd/QuadCopter
   
@@ -41,15 +42,14 @@ void Mag::init(){
   else{
     // TODO: put in self-test and calibrate
 
-    writeSetting(0x01, 0x02<<5); // 1.3 gauss scale
-    _scale = 0.92;
+    writeSetting(0x01, 0x01<<5); // 1.0 gauss scale
+    _scale = 1.0;
     writeSetting(0x02, 0x00); // continuous measurement mode
   }
 }
 
 // Updates all raw measurements from the magnetometer
-void Mag::updateAll(){
-  // TODO: pass in pitch and roll to apply tilt compensation at measurement time
+void Mag::updateAll(float roll, float pitch){
   // TODO: take calibration into account
 
   sendReadRequest(0x03);
@@ -59,6 +59,26 @@ void Mag::updateAll(){
   dataRaw[XAXIS] = readNextWordFlip() * _scale;
   dataRaw[ZAXIS] = readNextWordFlip() * _scale;
   dataRaw[YAXIS] = readNextWordFlip() * _scale;
+  
+  // apply tilt compensation
+  // TODO: check signs on roll/pitch vs mag to make sure we're all speaking the same language
+  roll = roll * PI / 180; // to radians
+  pitch = pitch * PI / 180; // to radians
+  
+  // Some of these are used twice, so rather than computing them twice in the algorithem we precompute them before hand.
+  float cosRoll = cos(roll);
+  float sinRoll = sin(roll);  
+  float cosPitch = cos(pitch);
+  float sinPitch = sin(pitch);
+  
+  float Xh = dataRaw[XAXIS] * cosPitch + dataRaw[ZAXIS] * sinPitch;
+  float Yh = dataRaw[XAXIS] * sinRoll * sinPitch + dataRaw[YAXIS] * cosRoll - dataRaw[ZAXIS] * sinRoll * cosPitch;
+  
+  _heading = atan2(Yh, Xh);
+   
+  // Correct for when signs are reversed.
+  if (_heading < 0)
+    _heading += (2 * PI);
 }
 
 ///////////
@@ -69,15 +89,8 @@ int Mag::getRaw(byte axis){
 
 // Our compass heading, in radians
 float Mag::getHeading(){
-  // Calculate heading when the magnetometer is level, then correct for signs of axis.
-  float heading = atan2(getRaw(YAXIS), getRaw(XAXIS));
-   
-  // Correct for when signs are reversed.
-  if (heading < 0)
-    heading += (2 * PI);
-  
   // TODO: Correct for declination at my house
-  return heading;
+  return _heading;
 }
 
 // Our compass heading in degrees
