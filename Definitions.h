@@ -83,4 +83,4 @@
 #define BATTERY_R2 7390.0 // 7.5k resistor measured with a multimeter, must be a float!
 #define BATTERY_AREF 5.0 // Arduino Mega runs at 5v
 #define BATTERY_DIODE 0.9 // On-board diode, measured with a multimeter
-#define ALARM_VOLTAGE 9.5
+#define ALARM_VOLTAGE 9.0
