@@ -42,6 +42,7 @@ class Mag : public I2C
     I2C _i2c;
 
     int dataRaw[3]; // Raw and unfiltered data
+    float _scale;
 };
 
 #endif

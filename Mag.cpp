@@ -19,6 +19,7 @@
 
   A good tutorial:
   https://www.loveelectronics.co.uk/Tutorials/8/hmc5883l-tutorial-and-arduino-library
+  https://www.loveelectronics.co.uk/Tutorials/13/tilt-compensated-compass-arduino-tutorial
 */
 
 #include "WProgram.h"
@@ -40,6 +41,8 @@ void Mag::init(){
   else{
     // TODO: put in self-test and calibrate
 
+    writeSetting(0x01, 0x02<<5); // 1.3 gauss scale
+    _scale = 0.92;
     writeSetting(0x02, 0x00); // continuous measurement mode
   }
 }
@@ -53,9 +56,9 @@ void Mag::updateAll(){
   requestBytes(6);
 
   // annoyingly, the registers are actually x,z,y (from the datasheet)
-  dataRaw[XAXIS] = readNextWordFlip();
-  dataRaw[ZAXIS] = readNextWordFlip();
-  dataRaw[YAXIS] = readNextWordFlip();
+  dataRaw[XAXIS] = readNextWordFlip() * _scale;
+  dataRaw[ZAXIS] = readNextWordFlip() * _scale;
+  dataRaw[YAXIS] = readNextWordFlip() * _scale;
 }
 
 ///////////
